@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Icons name -->
+    <string name="ic_main">Главная</string>
+    <string name="ic_transactions">Транзакции</string>
+    <string name="ic_budget">Бюджет</string>
+    <string name="ic_accounts">Счета</string>
+    <string name="ic_goals">Цели</string>
+    <string name="ic_settings">Настройки</string>
+    <string name="ic_add">Добавить</string>
+    <string name="ic_arrow_forward">Вперед</string>
+    <string name="ic_arrow_back">Назад</string>
+</resources>
