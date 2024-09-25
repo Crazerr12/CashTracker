@@ -12,7 +12,7 @@ internal actual fun RootScaffold(
 ) {
     Scaffold(
         modifier = modifier,
-
+        bottomBar = { navigationBar() },
         snackbarHost = {},
     ) { innerPadding ->
         content()

@@ -9,11 +9,13 @@ import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
 import kotlinx.serialization.Serializable
-import ru.crazerr.cashtracker.feature.main.presentation.mainStory.MainStoryComponent
 import ru.crazerr.cashtracker.core.utils.navigationDrawer.NavigationDrawerState
 import ru.crazerr.cashtracker.core.utils.navigationDrawer.navigationDrawerManager
 import ru.crazerr.cashtracker.core.utils.toast.ToastState
 import ru.crazerr.cashtracker.core.utils.toast.toastManager
+import ru.crazerr.cashtracker.feature.main.presentation.mainStory.MainStoryComponent
+import ru.crazerr.cashtracker.feature.transactions.presentation.transactionsStory.TransactionsStoryComponent
+import ru.crazerr.cashtracker.feature.transactions.presentation.transactionsStory.TransactionsStoryComponentAction
 
 interface RootComponent : BackHandlerOwner {
 
@@ -29,17 +31,21 @@ interface RootComponent : BackHandlerOwner {
 
     sealed interface Child {
         class MainChild(val component: MainStoryComponent) : Child
-        class TransactionChild(val component: MainStoryComponent) : Child
+        class TransactionsChild(val component: TransactionsStoryComponent) : Child
         class SettingsChild(val component: MainStoryComponent) : Child
         class BudgetChild(val component: MainStoryComponent) : Child
+        class GoalsChild(val component: MainStoryComponent) : Child
+        class AccountsChild(val component: MainStoryComponent) : Child
     }
 
     @Serializable
     sealed interface Config {
         data object MainStory : Config
-        data object TransactionStory : Config
+        data object TransactionsStory : Config
         data object SettingsStory : Config
         data object BudgetStory : Config
+        data object GoalsStory : Config
+        data object AccountsStory : Config
     }
 
     interface Factory {
@@ -97,16 +103,17 @@ internal class RootComponentImpl(
 
             RootNavigationDrawerActions.Transactions -> {
                 _selectedNavigationDrawerItem.value = actions
-                navigation.bringToFront(RootComponent.Config.TransactionStory)
+                navigation.bringToFront(RootComponent.Config.TransactionsStory)
             }
 
             RootNavigationDrawerActions.Accounts -> {
                 _selectedNavigationDrawerItem.value = actions
-                navigation.bringToFront(RootComponent.Config.TransactionStory)
+                navigation.bringToFront(RootComponent.Config.AccountsStory)
             }
+
             RootNavigationDrawerActions.Goals -> {
                 _selectedNavigationDrawerItem.value = actions
-                navigation.bringToFront(RootComponent.Config.TransactionStory)
+                navigation.bringToFront(RootComponent.Config.GoalsStory)
             }
         }
     }
@@ -116,7 +123,6 @@ internal class RootComponentImpl(
         componentContext: ComponentContext,
     ): RootComponent.Child =
         when (config) {
-            RootComponent.Config.BudgetStory -> TODO()
             RootComponent.Config.MainStory -> RootComponent.Child.MainChild(
                 component = di.mainStoryComponentFactory.create(
                     componentContext = componentContext,
@@ -128,8 +134,23 @@ internal class RootComponentImpl(
                 )
             )
 
+            RootComponent.Config.TransactionsStory -> RootComponent.Child.TransactionsChild(
+                component = di.transactionsStoryComponentFactory.create(
+                    componentContext = componentContext,
+                    onAction = { action ->
+                        when (action) {
+                            TransactionsStoryComponentAction.BackClick -> TODO()
+                        }
+                    }
+                )
+            )
+
+            RootComponent.Config.BudgetStory -> TODO()
+
             RootComponent.Config.SettingsStory -> TODO()
-            RootComponent.Config.TransactionStory -> TODO()
+
+            RootComponent.Config.GoalsStory -> TODO()
+            RootComponent.Config.AccountsStory -> TODO()
         }
 
     class FactoryImpl : RootComponent.Factory {

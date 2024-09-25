@@ -19,11 +19,16 @@ kotlin {
                 implementation(project(":core:utils"))
 
                 implementation(project(":feature:main:presentation"))
-                //implementation(project(":feature:budget:presentation"))
-                //implementation(project(":feature:transactions:presentation"))
-                //implementation(project(":feature:settings:presentation"))
+                implementation(project(":feature:budget:presentation"))
+                implementation(project(":feature:transactions:presentation"))
+                implementation(project(":feature:settings:presentation"))
 
                 implementation(libs.koin.core)
+
+                implementation(libs.coil.compose)
+                implementation(libs.coil)
+
+                implementation(libs.androidx.material3.adaptive)
 
                 implementation(libs.decompose)
                 implementation(libs.essenty)

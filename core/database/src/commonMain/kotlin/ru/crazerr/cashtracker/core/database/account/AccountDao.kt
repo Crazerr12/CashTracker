@@ -13,10 +13,10 @@ interface AccountDao {
     @Insert
     suspend fun insert(accountEntity: AccountEntity)
 
-    @Query("SELECT * FROM accounts WHERE id == :id")
+    @Query("SELECT * FROM account WHERE id == :id")
     suspend fun getAccountById(id: Long): AccountEntity
 
-    @Query("SELECT * FROM accounts")
+    @Query("SELECT * FROM account")
     fun getAll(): Flow<List<AccountEntity>>
 
     @Update

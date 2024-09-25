@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--main screen-->
-    <string name="main_screen_title">Главная</string>
+    <string name="transactions_screen_title">Транзакции</string>
 
-    <string name="main_screen_balance_card_current_balance_title">Текущий баланс</string>
-    <string name="main_screen_balance_card_current_expenses_title">Расходы за месяц</string>
-    <string name="main_screen_balance_card_current_income_title">Доходы за месяц</string>
-    <string name="main_screen_balance_card_accounts_title">Счета</string>
+    <string name="transactions_screen_search_bar_hint">Поиск транзакций</string>
 
-    <string name="main_screen_button_text_analyze">Анализ</string>
-    <string name="main_screen_button_text_new_account">Новый счет</string>
-    <string name="main_screen_button_text_new_budget">Новый бюджет</string>
-    <string name="main_screen_button_text_new_goal">Новая цель</string>
-    <string name="main_screen_button_text_new_transaction">Новая транзакция</string>
-    <string name="main_screen_button_text_import_data">Импорт данных</string>
+    <string name="transactions_screen_summary_card_title">Сводка</string>
+    <string name="transactions_screen_summary_card_text_income">Доходы</string>
+    <string name="transactions_screen_summary_card_text_expenses">Расходы</string>
+    <string name="transactions_screen_summary_card_subtitle_top_categories">Основные категори расходов</string>
+    <string name="transactions_screen_summary_card_subtitle_diagram">Тенденция расходов</string>
 
-    <string name="main_screen_expenses_by_categories_card_title">Расходы по категориям</string>
-
-    <string name="main_screen_transactions_card_tab_futures">Предстоящие</string>
-    <string name="main_screen_transactions_card_tab_recently">Последние</string>
-    <string name="main_screen_transactions_card_title">Транзакции</string>
-
-
+    <string name="transactions_screen_button_add_new_transaction">Добавить транзакцию</string>
     <!-- -->
 </resources>

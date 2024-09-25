@@ -1,75 +1,80 @@
 package ru.crazerr.cashtracker.feature.main.presentation.main.ui
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.material.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import cashtracker.feature.main.presentation.generated.resources.Res
+import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_accounts_title
+import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_current_balance_title
+import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_current_expenses_title
+import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_current_income_title
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_analyze
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_import_data
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_new_account
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_new_budget
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_new_goal
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_new_transaction
-import cashtracker.feature.main.presentation.generated.resources.main_screen_title
-import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import org.jetbrains.compose.resources.stringResource
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_accounts_title
-import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_current_balance_title
-import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_current_expenses_title
-import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_current_income_title
 import cashtracker.feature.main.presentation.generated.resources.main_screen_expenses_by_categories_card_title
+import cashtracker.feature.main.presentation.generated.resources.main_screen_title
 import cashtracker.feature.main.presentation.generated.resources.main_screen_transactions_card_tab_futures
 import cashtracker.feature.main.presentation.generated.resources.main_screen_transactions_card_tab_recently
 import cashtracker.feature.main.presentation.generated.resources.main_screen_transactions_card_title
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.format.char
-import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import ru.crazerr.cashtracker.core.compose.components.AddButton
 import ru.crazerr.cashtracker.core.compose.components.AppIconButton
+import ru.crazerr.cashtracker.core.compose.components.AppTextField
 import ru.crazerr.cashtracker.core.compose.components.TransactionItem
-import ru.crazerr.cashtracker.core.compose.icons.AppIcon
 import ru.crazerr.cashtracker.core.compose.icons.AppIcons
 import ru.crazerr.cashtracker.core.compose.theme.AppTheme
 import ru.crazerr.cashtracker.core.utils.dateTime.getMonthNames
 import ru.crazerr.cashtracker.core.utils.model.TransactionType
+import ru.crazerr.cashtracker.feature.main.domain.model.Account
 import ru.crazerr.cashtracker.feature.main.domain.model.Transaction
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainComponent
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainState
@@ -78,6 +83,12 @@ import ru.crazerr.cashtracker.feature.main.presentation.main.MainViewAction
 @Composable
 actual fun MainView(component: MainComponent) {
     val state by component.state.subscribeAsState()
+
+    if (state.newTransactionDialogIsShow) {
+        TransactionDialog(state = state, onDismissRequest = {
+            component.obtainViewAction(MainViewAction.ManageTransactionDialog)
+        }, obtainViewAction = component::obtainViewAction)
+    }
 
     MainViewContent(state = state, obtainViewAction = component::obtainViewAction)
 }
@@ -113,7 +124,11 @@ private fun MainViewContent(
 
             Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen20))
 
-            BalanceCard(modifier = Modifier.fillMaxWidth().weight(1f))
+            BalanceCard(
+                modifier = Modifier.fillMaxWidth().weight(1f),
+                state = state,
+                obtainViewAction = obtainViewAction
+            )
         }
     }
 }
@@ -134,7 +149,7 @@ private fun MainViewHeader(obtainViewAction: (MainViewAction) -> Unit) {
     ) {
         AddButton(
             text = stringResource(Res.string.main_screen_button_text_new_transaction),
-            onClick = { obtainViewAction(MainViewAction.NewTransactionButtonClick) },
+            onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
             shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
             painter = AppIcons.PlusIcon.painter,
             contentDescription = AppIcons.PlusIcon.contentDescription,
@@ -145,7 +160,7 @@ private fun MainViewHeader(obtainViewAction: (MainViewAction) -> Unit) {
 
         AddButton(
             text = stringResource(Res.string.main_screen_button_text_new_budget),
-            onClick = { obtainViewAction(MainViewAction.NewTransactionButtonClick) },
+            onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
             shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
             painter = AppIcons.PlusIcon.painter,
             contentDescription = AppIcons.PlusIcon.contentDescription,
@@ -156,7 +171,7 @@ private fun MainViewHeader(obtainViewAction: (MainViewAction) -> Unit) {
 
         AddButton(
             text = stringResource(Res.string.main_screen_button_text_new_goal),
-            onClick = { obtainViewAction(MainViewAction.NewTransactionButtonClick) },
+            onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
             shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
             painter = AppIcons.PlusIcon.painter,
             contentDescription = AppIcons.PlusIcon.contentDescription,
@@ -167,7 +182,7 @@ private fun MainViewHeader(obtainViewAction: (MainViewAction) -> Unit) {
 
         AddButton(
             text = stringResource(Res.string.main_screen_button_text_new_account),
-            onClick = { obtainViewAction(MainViewAction.NewTransactionButtonClick) },
+            onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
             shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
             painter = AppIcons.PlusIcon.painter,
             contentDescription = AppIcons.PlusIcon.contentDescription,
@@ -178,7 +193,7 @@ private fun MainViewHeader(obtainViewAction: (MainViewAction) -> Unit) {
 
         AddButton(
             text = stringResource(Res.string.main_screen_button_text_import_data),
-            onClick = { obtainViewAction(MainViewAction.NewTransactionButtonClick) },
+            onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
             shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
             painter = AppIcons.PlusIcon.painter,
             contentDescription = AppIcons.PlusIcon.contentDescription,
@@ -189,7 +204,7 @@ private fun MainViewHeader(obtainViewAction: (MainViewAction) -> Unit) {
 
         AddButton(
             text = stringResource(Res.string.main_screen_button_text_analyze),
-            onClick = { obtainViewAction(MainViewAction.NewTransactionButtonClick) },
+            onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
             shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
             painter = AppIcons.PlusIcon.painter,
             contentDescription = AppIcons.PlusIcon.contentDescription,
@@ -365,24 +380,25 @@ private fun CategoryExpensesCard(modifier: Modifier = Modifier) {
                 text = stringResource(Res.string.main_screen_expenses_by_categories_card_title),
                 style = AppTheme.TextStyles.title.copy(color = AppTheme.Colors.black)
             )
-
-            Column(modifier = Modifier) {
-
-            }
         }
     }
 }
 
 @Composable
-private fun BalanceCard(modifier: Modifier = Modifier) {
+private fun BalanceCard(
+    modifier: Modifier = Modifier,
+    state: MainState,
+    obtainViewAction: (MainViewAction) -> Unit,
+) {
     Card(modifier = modifier) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = AppTheme.Dimens.dimen20)
+                .padding(bottom = AppTheme.Dimens.dimen20)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(all = AppTheme.Dimens.dimen20),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 BalanceCardTitle(
@@ -403,15 +419,56 @@ private fun BalanceCard(modifier: Modifier = Modifier) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen20))
-
             BasicText(
+                modifier = Modifier.padding(horizontal = AppTheme.Dimens.dimen20),
                 text = stringResource(Res.string.main_screen_balance_card_accounts_title),
                 style = AppTheme.TextStyles.subtitle.copy(color = AppTheme.Colors.black)
             )
 
             Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen8))
+
+            LazyRow(modifier = Modifier.fillMaxSize()) {
+                items(40) {
+                    Card(
+                        modifier = Modifier.fillMaxWidth().size(100.dp)
+                            .background(color = AppTheme.Colors.red)
+                    ) {
+                        Button(
+                            onClick = {},
+                            content = {
+                                BasicText(text = "Нажми")
+                            }
+                        )
+                    }
+                }
+            }
         }
+    }
+}
+
+@Composable
+private fun AccountItem(
+    modifier: Modifier = Modifier,
+    account: Account,
+    obtainViewAction: (MainViewAction) -> Unit,
+) {
+    Column(
+        modifier = modifier
+            .padding(AppTheme.Dimens.dimen8)
+            .width(AppTheme.Dimens.dimen100)
+            .clickable { obtainViewAction(MainViewAction.AccountClick(account.id)) }
+    ) {
+        BasicText(
+            text = account.name,
+            style = AppTheme.TextStyles.body.copy(color = AppTheme.Colors.black)
+        )
+
+        Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen4))
+
+        BasicText(
+            text = account.balance.toString() + " ${account.currency}",
+            style = AppTheme.TextStyles.subtitle.copy(AppTheme.Colors.black)
+        )
     }
 }
 
@@ -458,6 +515,82 @@ private fun TransactionsList(
                 account = it.account.name,
                 currency = it.account.currency,
                 category = it.category.name
+            )
+        }
+    }
+}
+
+@Composable
+private fun TransactionDialog(
+    onDismissRequest: () -> Unit,
+    state: MainState,
+    obtainViewAction: (MainViewAction) -> Unit,
+) {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+    ) {
+        Column(
+            modifier = Modifier.padding(AppTheme.Dimens.dimen16).sizeIn(280.dp, 100.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            AppTextField(
+                value = state.newTransactionTitle,
+                onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
+                hint = stringResource(Res.string.main_screen_title)
+            )
+
+            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
+
+            AppTextField(
+                value = state.newTransactionType?.name ?: "",
+                onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
+                hint = stringResource(Res.string.main_screen_title)
+            )
+
+            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
+
+            Row(modifier = Modifier.fillMaxWidth()) {
+                AppTextField(
+                    value = state.newTransactionSumma.toString(),
+                    onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
+                    hint = stringResource(Res.string.main_screen_title)
+                )
+
+
+                //DropDown
+            }
+
+            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
+
+            AppTextField(
+                value = state.newTransactionType?.name ?: "",
+                onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
+                hint = stringResource(Res.string.main_screen_title)
+            )
+
+            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
+
+            AppTextField(
+                value = state.newTransactionTitle,
+                onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
+                hint = stringResource(Res.string.main_screen_title)
+            )
+
+            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
+
+            AppTextField(
+                value = state.newTransactionTitle,
+                onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
+                hint = stringResource(Res.string.main_screen_title)
+            )
+
+            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
+
+            AppTextField(
+                value = state.newTransactionTitle,
+                onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
+                hint = stringResource(Res.string.main_screen_title)
             )
         }
     }

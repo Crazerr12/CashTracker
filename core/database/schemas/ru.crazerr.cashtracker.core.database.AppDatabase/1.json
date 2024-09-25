@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "57402f2e22005bdb905813bd4ce9c28c",
+    "identityHash": "df8255381d15405ed609999bda8e27f4",
     "entities": [
       {
-        "tableName": "categories",
+        "tableName": "categorie",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)",
         "fields": [
           {
@@ -29,7 +29,7 @@
         }
       },
       {
-        "tableName": "goals",
+        "tableName": "goal",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `target_amount` REAL NOT NULL, `current_amount` REAL NOT NULL, `due_date` TEXT NOT NULL)",
         "fields": [
           {
@@ -71,7 +71,7 @@
         }
       },
       {
-        "tableName": "accounts",
+        "tableName": "account",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `balance` REAL NOT NULL, `currency` TEXT NOT NULL)",
         "fields": [
           {
@@ -108,7 +108,7 @@
       },
       {
         "tableName": "transactions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `amount` REAL NOT NULL, `type` TEXT NOT NULL, `date` TEXT NOT NULL, `category_id` INTEGER NOT NULL, `account_id` INTEGER NOT NULL, `description` TEXT, FOREIGN KEY(`category_id`) REFERENCES `categories`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`account_id`) REFERENCES `accounts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `amount` REAL NOT NULL, `type` TEXT NOT NULL, `date` TEXT NOT NULL, `category_id` INTEGER NOT NULL, `account_id` INTEGER NOT NULL, `description` TEXT, FOREIGN KEY(`category_id`) REFERENCES `categorie`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`account_id`) REFERENCES `account`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -186,7 +186,7 @@
         ],
         "foreignKeys": [
           {
-            "table": "categories",
+            "table": "categorie",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -197,7 +197,7 @@
             ]
           },
           {
-            "table": "accounts",
+            "table": "account",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -212,7 +212,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '57402f2e22005bdb905813bd4ce9c28c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'df8255381d15405ed609999bda8e27f4')"
     ]
   }
 }

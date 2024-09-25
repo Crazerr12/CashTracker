@@ -14,10 +14,10 @@ interface CategoryDao {
     @Insert
     suspend fun insert(vararg categoryEntity: CategoryEntity)
 
-    @Query("SELECT * FROM categories WHERE id == :id")
+    @Query("SELECT * FROM categorie WHERE id == :id")
     suspend fun getCategoryById(id: Long): CategoryEntity
 
-    @Query("SELECT * FROM categories")
+    @Query("SELECT * FROM categorie")
     fun getAll(): Flow<List<CategoryEntity>>
 
     @Update

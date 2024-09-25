@@ -1,10 +1,10 @@
 package ru.crazerr.cashtracker.feature.main.presentation.main
 
-import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnResume
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import ru.crazerr.cashtracker.core.utils.coroutine.callUseCase
@@ -23,19 +23,34 @@ class MainComponent(
 
     init {
         doOnResume {
-            getUserTransactions()
             getUserAccounts()
         }
     }
 
     override fun obtainViewAction(action: MainViewAction) {
         when (action) {
-            MainViewAction.NewTransactionButtonClick -> onNewTransactionClick()
+            MainViewAction.ManageTransactionDialog -> onManageTransactionDialog()
             MainViewAction.NextButtonClick -> onNextButtonClick()
             MainViewAction.PreviousButtonClick -> onPreviousButtonClick()
             is MainViewAction.SetItemsToShow -> onSetItemsToShowClick(action.itemsToShow)
             MainViewAction.ManageDropdownMenu -> onManageDropdownMenu()
+            is MainViewAction.UpdateNewTransactionCategory -> onUpdateNewTransactionCategory(action.id)
+            is MainViewAction.UpdateNewTransactionDate -> onUpdateNewTransactionDate(action.date)
+            is MainViewAction.UpdateNewTransactionTitle -> onUpdateNewTransactionTitle(action.title)
+            is MainViewAction.AccountClick -> TODO()
         }
+    }
+
+    private fun onUpdateNewTransactionCategory(id: Long) {
+        reduceState { copy(newTransactionCategoryId = id) }
+    }
+
+    private fun onUpdateNewTransactionDate(date: LocalDate) {
+        reduceState { copy(newTransactionDate = date) }
+    }
+
+    private fun onUpdateNewTransactionTitle(title: String) {
+        reduceState { copy(newTransactionTitle = title) }
     }
 
     private fun getUserTransactions() {
@@ -64,8 +79,12 @@ class MainComponent(
         }
     }
 
-    private fun onNewTransactionClick() {
-
+    private fun onManageTransactionDialog() {
+        reduceState {
+            copy(
+                newTransactionDialogIsShow = !newTransactionDialogIsShow
+            )
+        }
     }
 
     private fun onNextButtonClick() {

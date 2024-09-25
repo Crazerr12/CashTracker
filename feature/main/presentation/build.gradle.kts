@@ -32,10 +32,14 @@ kotlin {
             implementation(libs.essenty)
 
             implementation(libs.kotlinx.datetime)
+
+            implementation(libs.coil.compose.core)
+            implementation(libs.coil.compose)
+            implementation(libs.coil)
+            implementation(libs.coil.network.ktor)
         }
 
         androidMain.dependencies {
-
         }
 
         jvmMain.dependencies {

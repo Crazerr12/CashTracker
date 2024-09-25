@@ -10,4 +10,7 @@
     <string name="ic_add">Добавить</string>
     <string name="ic_arrow_forward">Вперед</string>
     <string name="ic_arrow_back">Назад</string>
+    <string name="ic_angle_up">Свернуть</string>
+    <string name="ic_angle_down">Развернуть</string>
+    <string name="ic_calendar_empty">Дата</string>
 </resources>

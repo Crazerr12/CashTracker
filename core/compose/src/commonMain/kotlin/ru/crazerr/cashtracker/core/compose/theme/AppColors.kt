@@ -10,6 +10,7 @@ data class AppColors(
     val green: Color,
     val yellow: Color,
     val red: Color,
+    val gray: Color,
 )
 
 internal val defaultColors = AppColors(
@@ -20,6 +21,7 @@ internal val defaultColors = AppColors(
     green = Color(0xFF22C761),
     yellow = Color(0xFFE8B526),
     red = Color(0xFFF04241),
+    gray = Color(0xFFE5E7EB),
 )
 
 internal val darkColors = AppColors(
@@ -30,4 +32,5 @@ internal val darkColors = AppColors(
     green = Color(0xFF22C761),
     yellow = Color(0xFFE8B526),
     red = Color(0xFFF04241),
+    gray = Color(0xFFE5E7EB),
 )

@@ -3,11 +3,11 @@ package ru.crazerr.cashtracker.core.compose.icons
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import cashtracker.core.compose.generated.resources.Res
-import cashtracker.core.compose.generated.resources.ic_accounts
 import cashtracker.core.compose.generated.resources.ic_add
 import cashtracker.core.compose.generated.resources.ic_arrow_back
 import cashtracker.core.compose.generated.resources.ic_arrow_forward
 import cashtracker.core.compose.generated.resources.ic_budget
+import cashtracker.core.compose.generated.resources.ic_calendar_empty
 import cashtracker.core.compose.generated.resources.ic_goals
 import cashtracker.core.compose.generated.resources.ic_main
 import cashtracker.core.compose.generated.resources.ic_settings
@@ -50,11 +50,11 @@ object AppIcons {
             contentDescriptionResource = Res.string.ic_budget,
         )
 
-    val Accounts: AppIcon
-        get() = AppIcon(
-            drawableResource = Res.drawable.ic_accounts,
-            contentDescriptionResource = Res.string.ic_accounts,
-        )
+//    val Accounts: AppIcon
+//        get() = AppIcon(
+//            drawableResource = Res.drawable.ic_accounts,
+//            contentDescriptionResource = Res.string.ic_accounts,
+//        )
 
     val Goals: AppIcon
         get() = AppIcon(
@@ -84,5 +84,23 @@ object AppIcons {
         get() = AppIcon(
             drawableResource = Res.drawable.ic_arrow_back,
             contentDescriptionResource = Res.string.ic_arrow_back,
+        )
+
+    val AngleDown: AppIcon
+        get() = AppIcon(
+            drawableResource = Res.drawable.ic_add,
+            contentDescriptionResource = Res.string.ic_add
+        )
+
+    val AngleUp: AppIcon
+        get() = AppIcon(
+            drawableResource = Res.drawable.ic_add,
+            contentDescriptionResource = Res.string.ic_add
+        )
+
+    val Calendar: AppIcon
+        get() = AppIcon(
+            drawableResource = Res.drawable.ic_calendar_empty,
+            contentDescriptionResource = Res.string.ic_calendar_empty
         )
 }

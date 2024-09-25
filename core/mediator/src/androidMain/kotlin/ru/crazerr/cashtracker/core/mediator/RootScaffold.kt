@@ -1,5 +1,6 @@
 package ru.crazerr.cashtracker.core.mediator
 
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
@@ -9,5 +10,11 @@ internal actual fun RootScaffold(
     navigationBar: @Composable () -> Unit,
     content: @Composable () -> Unit,
 ) {
-
+    Scaffold(
+        modifier = modifier,
+        bottomBar = { navigationBar() },
+        snackbarHost = {},
+    ) { innerPadding ->
+        content()
+    }
 }
