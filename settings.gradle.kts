@@ -1,6 +1,5 @@
-rootProject.name = "CashTracker"
-
 pluginManagement {
+    includeBuild("convention-plugins/project")
     repositories {
         google()
         gradlePluginPortal()
@@ -8,7 +7,6 @@ pluginManagement {
         maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
     }
 }
-
 dependencyResolutionManagement {
     repositories {
         google()
@@ -16,6 +14,9 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
     }
 }
+
+rootProject.name = "CashTracker"
+
 include(":composeApp")
 include(":desktopApp")
 include(":umbrella")
