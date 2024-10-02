@@ -21,25 +21,25 @@ val transactionDomainModule = module {
 
     factory<GetCategoriesUseCase> {
         GetCategoriesUseCaseImpl(
-            categoriesRepository = get()
+            categoryRepository = get()
         )
     }
 
     factory<AddCategoryUseCase> {
         AddCategoryUseCaseImpl(
-            categoriesRepository = get()
+            categoryRepository = get()
         )
     }
 
     factory<AddAccountUseCase> {
         AddAccountUseCaseImpl(
-            accountsRepository = get()
+            accountRepository = get()
         )
     }
 
     factory<GetAccountsUseCase> {
         GetAccountsUseCaseImpl(
-            accountsRepository = get()
+            accountRepository = get()
         )
     }
 }
