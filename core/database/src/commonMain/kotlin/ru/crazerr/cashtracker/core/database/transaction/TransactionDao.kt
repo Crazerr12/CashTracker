@@ -16,10 +16,19 @@ interface TransactionDao {
     @Query("SELECT * FROM transactions WHERE id == :id")
     suspend fun getById(id: Long): TransactionEntity
 
-    @Query("SELECT * FROM transactions")
-    fun getAll(): Flow<List<TransactionEntity>>
-
     @Transaction
+    @Query(
+        """
+        SELECT t.id AS transaction_id, t.name, t.amount, t.type, t.date, t.description,
+            c.id AS category_id, c.name AS category_name,
+            a.id AS account_id, a.name AS account_name, a.balance AS account_balance, a.currency AS account_currency
+        FROM transactions t
+        INNER JOIN categories c ON t.category_id = c.id
+        INNER JOIN accounts a ON t.account_id = a.id
+    """
+    )
+    fun getAll(): Flow<List<TransactionWithCategoryAndAccount>>
+
     @Query("SELECT * FROM transactions")
     fun getByMonth(): Flow<List<TransactionEntity>>
 
