@@ -1,9 +1,9 @@
-package ru.crazerr.cashtracker.feature.transaction.domain.usecase.addCategory
+package ru.crazerr.cashtracker.feature.category.domain.usecase.addCategory
 
 import ru.crazerr.cashtracker.core.utils.domain.UseCase
 import ru.crazerr.cashtracker.core.utils.exception.fold
 import ru.crazerr.cashtracker.feature.category.domain.api.model.Category
-import ru.crazerr.cashtracker.feature.transaction.domain.repository.CategoryRepository
+import ru.crazerr.cashtracker.feature.category.domain.repository.CategoryRepository
 
 interface AddCategoryUseCase : UseCase<Category, AddCategoryResult>
 

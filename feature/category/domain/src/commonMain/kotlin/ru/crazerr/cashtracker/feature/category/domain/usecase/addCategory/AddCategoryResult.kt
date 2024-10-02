@@ -1,4 +1,4 @@
-package ru.crazerr.cashtracker.feature.transaction.domain.usecase.addCategory
+package ru.crazerr.cashtracker.feature.category.domain.usecase.addCategory
 
 sealed interface AddCategoryResult {
     data object Ok : AddCategoryResult

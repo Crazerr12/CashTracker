@@ -1,4 +1,4 @@
-package ru.crazerr.cashtracker.feature.transaction.domain.usecase.addAccount
+package ru.crazerr.cashtracker.feature.account.domain.usecase.addAccount
 
 sealed interface AddAccountResult {
     data object Ok : AddAccountResult

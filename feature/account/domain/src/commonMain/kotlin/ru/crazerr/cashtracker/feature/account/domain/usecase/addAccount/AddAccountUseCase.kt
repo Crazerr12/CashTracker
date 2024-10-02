@@ -1,11 +1,11 @@
-package ru.crazerr.cashtracker.feature.transaction.domain.usecase.addAccount
+package ru.crazerr.cashtracker.feature.account.domain.usecase.addAccount
 
 import ru.crazerr.cashtracker.core.utils.domain.UseCase
 import ru.crazerr.cashtracker.core.utils.exception.fold
 import ru.crazerr.cashtracker.feature.account.domain.api.model.Account
-import ru.crazerr.cashtracker.feature.transaction.domain.repository.AccountRepository
+import ru.crazerr.cashtracker.feature.account.domain.repository.AccountRepository
 
-interface AddAccountUseCase : UseCase<Account, AddAccountResult>
+interface AddAccountUseCase: UseCase<Account, AddAccountResult>
 
 internal class AddAccountUseCaseImpl(
     private val accountRepository: AccountRepository,

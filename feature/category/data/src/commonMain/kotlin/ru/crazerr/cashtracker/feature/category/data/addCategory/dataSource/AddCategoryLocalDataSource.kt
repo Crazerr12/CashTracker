@@ -1,4 +1,4 @@
-package ru.crazerr.cashtracker.feature.transaction.data.category.addCategory.dataSource
+package ru.crazerr.cashtracker.feature.category.data.addCategory.dataSource
 
 import ru.crazerr.cashtracker.core.database.category.CategoryDao
 import ru.crazerr.cashtracker.core.database.category.CategoryEntity
