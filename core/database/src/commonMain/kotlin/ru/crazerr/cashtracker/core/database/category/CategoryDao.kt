@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface CategoryDao {
 
     @Insert
-    suspend fun insert(vararg categoryEntity: CategoryEntity)
+    suspend fun insert(categoryEntity: CategoryEntity): Long
 
     @Query("SELECT * FROM categories WHERE id == :id")
     suspend fun getCategoryById(id: Long): CategoryEntity

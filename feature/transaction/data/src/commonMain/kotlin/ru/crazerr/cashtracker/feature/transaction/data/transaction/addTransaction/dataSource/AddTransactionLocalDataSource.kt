@@ -1,34 +1,37 @@
 package ru.crazerr.cashtracker.feature.transaction.data.transaction.addTransaction.dataSource
 
+import kotlinx.datetime.LocalDate
 import ru.crazerr.cashtracker.core.database.transaction.TransactionDao
 import ru.crazerr.cashtracker.core.database.transaction.TransactionEntity
-import ru.crazerr.cashtracker.feature.transaction.domain.api.model.Transaction
+import ru.crazerr.cashtracker.core.utils.model.TransactionType
 
 internal class AddTransactionLocalDataSource(
     private val transactionDao: TransactionDao,
 ) {
-    suspend fun addTransaction(transaction: Transaction): Result<Unit> {
+    suspend fun addTransaction(
+        name: String,
+        type: TransactionType,
+        amount: Float,
+        categoryId: Long,
+        accountId: Long,
+        date: LocalDate,
+        description: String?,
+    ): Result<Long> {
         return try {
-            transactionDao.insert(
-                transactionEntity = arrayOf(
-                    transaction.toTransactionEntity()
+            val transactionId = transactionDao.insert(
+                transactionEntity = TransactionEntity(
+                    name = name,
+                    amount = amount,
+                    type = type,
+                    date = date,
+                    categoryId = categoryId,
+                    accountId = accountId,
+                    description = description
                 )
             )
-            Result.success(Unit)
+            Result.success(transactionId)
         } catch (ex: Exception) {
             Result.failure(ex)
         }
     }
 }
-
-internal fun Transaction.toTransactionEntity() =
-    TransactionEntity(
-        id = id,
-        name = name,
-        amount = amount,
-        type = type,
-        date = date,
-        categoryId = category.id,
-        accountId = account.id,
-        description = description
-    )

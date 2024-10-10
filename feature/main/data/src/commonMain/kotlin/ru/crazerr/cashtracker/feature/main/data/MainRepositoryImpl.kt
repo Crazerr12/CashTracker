@@ -11,7 +11,7 @@ class MainRepositoryImpl(
         return categoryDao.getAll()
     }
 
-    suspend fun insertCategory(vararg categoryEntity: CategoryEntity) {
-        categoryDao.insert(*categoryEntity)
+    suspend fun insertCategory(categoryEntity: CategoryEntity) {
+        categoryDao.insert(categoryEntity)
     }
 }

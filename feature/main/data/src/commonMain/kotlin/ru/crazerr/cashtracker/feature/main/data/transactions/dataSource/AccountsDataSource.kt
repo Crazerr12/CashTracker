@@ -7,7 +7,6 @@ import ru.crazerr.cashtracker.core.database.account.AccountEntity
 internal class AccountsDataSource(
     private val accountDao: AccountDao,
 ) {
-
     fun getAccounts(): Flow<List<AccountEntity>> {
         return accountDao.getAll()
     }

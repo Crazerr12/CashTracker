@@ -7,6 +7,7 @@ plugins {
 commonMainDependencies {
     implementation(project(":feature:category:data"))
     implementation(project(":feature:category:domain"))
+    implementation(project(":feature:category:presentation:api"))
 
     implementation(libs.kotlinx.datetime)
 }

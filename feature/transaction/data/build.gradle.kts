@@ -1,3 +1,4 @@
+import ru.crazerr.cashtracker.conventionplugins.base.extensions.libs
 import ru.crazerr.cashtracker.conventionplugins.project.extensions.commonMainDependencies
 
 plugins {

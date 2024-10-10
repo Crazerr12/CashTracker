@@ -1,25 +1,20 @@
 package ru.crazerr.cashtracker.desktop
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.arkivanov.decompose.extensions.compose.lifecycle.LifecycleController
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
-import org.koin.core.context.GlobalContext.getOrNull
 import ru.crazerr.cashtracker.core.compose.theme.AppTheme
 import ru.crazerr.cashtracker.core.mediator.RootCoordinator
-import ru.crazerr.cashtracker.core.utils.utilsModule
-import ru.crazerr.cashtracker.umbrella.initKoin
+import ru.crazerr.cashtracker.umbrella.Koin
 import java.awt.Dimension
 
 
 fun main() {
-    if (getOrNull() == null) {
-        initKoin()
-    }
+    Koin.setupKoin()
+
     val lifecycle = LifecycleRegistry()
 
     val rootComponent = runOnUiThread {

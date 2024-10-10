@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface AccountDao {
 
     @Insert
-    suspend fun insert(accountEntity: AccountEntity)
+    suspend fun insert(accountEntity: AccountEntity): Long
 
     @Query("SELECT * FROM accounts WHERE id == :id")
     suspend fun getAccountById(id: Long): AccountEntity

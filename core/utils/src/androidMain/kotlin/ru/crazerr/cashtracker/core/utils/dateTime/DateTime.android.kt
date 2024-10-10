@@ -1,10 +1,9 @@
 package ru.crazerr.cashtracker.core.utils.dateTime
 
 import android.annotation.SuppressLint
-import android.os.Build
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
-import org.intellij.lang.annotations.Pattern
 import java.text.DateFormatSymbols
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -20,4 +19,20 @@ actual fun getMonthNames(languageTag: String): List<String> {
     val locale = Locale.getDefault()
     val symbols = DateFormatSymbols.getInstance(locale)
     return symbols.months.take(12)
+}
+
+actual fun String.fromInput(): LocalDate {
+    TODO("Not yet implemented")
+}
+
+actual fun Long.toLocalDate(): LocalDate {
+    TODO("Not yet implemented")
+}
+
+actual fun LocalDate.toInput(): String {
+    TODO("Not yet implemented")
+}
+
+actual fun LocalDate.toEpochMilliSeconds(): Long {
+    TODO("Not yet implemented")
 }

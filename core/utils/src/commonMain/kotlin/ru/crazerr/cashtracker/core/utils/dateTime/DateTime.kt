@@ -31,3 +31,11 @@ fun LocalDateTime.minus(value: Long, unit: DateTimeUnit.TimeBased): LocalDateTim
 expect fun format(localDateTime: LocalDateTime): String
 
 expect fun getMonthNames(languageTag: String): List<String>
+
+expect fun String.fromInput(): LocalDate
+
+expect fun Long.toLocalDate(): LocalDate
+
+expect fun LocalDate.toEpochMilliSeconds(): Long
+
+expect fun LocalDate.toInput(): String

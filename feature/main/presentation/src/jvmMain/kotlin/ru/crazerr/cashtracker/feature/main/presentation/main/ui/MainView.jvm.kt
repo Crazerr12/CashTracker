@@ -66,6 +66,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.format.char
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import ru.crazerr.cashtracker.core.compose.components.AddButton
 import ru.crazerr.cashtracker.core.compose.components.AppIconButton
 import ru.crazerr.cashtracker.core.compose.components.AppTextField
@@ -74,20 +75,31 @@ import ru.crazerr.cashtracker.core.compose.icons.AppIcons
 import ru.crazerr.cashtracker.core.compose.theme.AppTheme
 import ru.crazerr.cashtracker.core.utils.dateTime.getMonthNames
 import ru.crazerr.cashtracker.core.utils.model.TransactionType
+import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountViewFactory
 import ru.crazerr.cashtracker.feature.main.domain.model.Account
 import ru.crazerr.cashtracker.feature.main.domain.model.Transaction
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainComponent
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainState
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainViewAction
+import ru.crazerr.cashtracker.feature.transaction.presentation.api.createTransactionDialog.CreateTransactionViewFactory
 
 @Composable
 actual fun MainView(component: MainComponent) {
     val state by component.state.subscribeAsState()
+    val dialogState by component.dialog.subscribeAsState()
 
-    if (state.newTransactionDialogIsShow) {
-        TransactionDialog(state = state, onDismissRequest = {
-            component.obtainViewAction(MainViewAction.ManageTransactionDialog)
-        }, obtainViewAction = component::obtainViewAction)
+    dialogState.child?.instance?.also {
+        when (it) {
+            is MainComponent.DialogChild.CreateAccount -> {
+                val createAccountDialog = koinInject<CreateAccountViewFactory>()
+                createAccountDialog.create(modifier = Modifier, component = it.component)
+            }
+
+            is MainComponent.DialogChild.CreateTransaction -> {
+                val createTransactionDialog = koinInject<CreateTransactionViewFactory>()
+                createTransactionDialog.create(modifier = Modifier, component = it.component)
+            }
+        }
     }
 
     MainViewContent(state = state, obtainViewAction = component::obtainViewAction)

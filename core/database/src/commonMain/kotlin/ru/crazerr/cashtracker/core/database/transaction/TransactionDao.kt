@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TransactionDao {
     @Insert
-    suspend fun insert(vararg transactionEntity: TransactionEntity)
+    suspend fun insert(transactionEntity: TransactionEntity): Long
 
     @Query("SELECT * FROM transactions WHERE id == :id")
     suspend fun getById(id: Long): TransactionEntity

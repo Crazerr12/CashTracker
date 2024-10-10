@@ -21,6 +21,8 @@ class FeatureDataPlugin : Plugin<Project> {
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.koin.core)
                 implementation(libs.room.runtime)
+                implementation(libs.sqlite.bundled)
+                implementation(libs.sqlite)
             }
 
             androidMainDependencies {
