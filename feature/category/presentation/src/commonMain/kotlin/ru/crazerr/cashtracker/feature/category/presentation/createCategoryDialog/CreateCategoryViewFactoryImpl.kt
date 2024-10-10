@@ -8,7 +8,7 @@ import ru.crazerr.cashtracker.feature.category.presentation.createCategoryDialog
 
 internal class CreateCategoryViewFactoryImpl : CreateCategoryViewFactory {
     @Composable
-    override fun create(modifier : Modifier, component: CreateCategoryComponent) {
+    override fun create(modifier: Modifier, component: CreateCategoryComponent) {
         CreateCategoryView(modifier = modifier, component = component)
     }
 }

@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import ru.crazerr.cashtracker.core.compose.icons.AppIcon
 import ru.crazerr.cashtracker.core.compose.icons.AppIcons
 import ru.crazerr.cashtracker.core.compose.theme.AppTheme
 
@@ -30,7 +29,8 @@ actual fun AppIconButton(
         modifier = modifier
             .size(IconSize)
             .background(color = backgroundTint, shape = CircleShape)
-            .clip(CircleShape).clickable(onClick = onClick)
+            .clip(CircleShape)
+            .clickable(onClick = onClick)
     ) {
         Icon(
             modifier = Modifier.align(Alignment.Center),

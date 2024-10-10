@@ -13,7 +13,6 @@ import ru.crazerr.cashtracker.core.mediator.RootCoordinator
 class AppActivity : ComponentActivity() {
     private val rootComponentFactory: RootComponent.Factory by inject()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

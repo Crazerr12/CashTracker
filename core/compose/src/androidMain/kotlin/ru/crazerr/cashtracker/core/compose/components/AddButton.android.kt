@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import ru.crazerr.cashtracker.core.compose.icons.AppIcons
 import ru.crazerr.cashtracker.core.compose.theme.AppTheme
 
+@Suppress("LongParameterList")
 @Composable
 actual fun AddButton(
     modifier: Modifier,

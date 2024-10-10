@@ -17,6 +17,7 @@ import kotlinx.datetime.LocalDate
 import ru.crazerr.cashtracker.core.compose.theme.AppTheme
 import ru.crazerr.cashtracker.core.utils.model.TransactionType
 
+@Suppress("LongParameterList")
 @Composable
 actual fun TransactionItem(
     modifier: Modifier,
@@ -35,7 +36,7 @@ actual fun TransactionItem(
             painter = icon,
             contentDescription = contentDescription,
 
-            )
+        )
 
         Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen16))
 
@@ -59,8 +60,11 @@ actual fun TransactionItem(
             BasicText(
                 text = if (type == TransactionType.EXPENSE) "-$amount $currency" else "$amount $currency",
                 style = AppTheme.TextStyles.body.copy(
-                    color = if (type == TransactionType.EXPENSE) AppTheme.Colors.green
-                    else AppTheme.Colors.red
+                    color = if (type == TransactionType.EXPENSE) {
+                        AppTheme.Colors.green
+                    } else {
+                        AppTheme.Colors.red
+                    }
                 )
             )
 

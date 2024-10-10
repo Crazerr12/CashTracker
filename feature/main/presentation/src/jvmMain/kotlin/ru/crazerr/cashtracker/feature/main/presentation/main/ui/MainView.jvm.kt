@@ -365,7 +365,6 @@ private fun TransactionsCard(
                         )
                     }
                 }
-
             }
             when (tabIndex) {
                 0 -> TransactionsList(
@@ -508,7 +507,6 @@ private fun BalanceCardTitle(
 
 @Composable
 private fun CategoriesPie(modifier: Modifier = Modifier) {
-
 }
 
 @Composable
@@ -545,7 +543,6 @@ private fun TransactionDialog(
             modifier = Modifier.padding(AppTheme.Dimens.dimen16).sizeIn(280.dp, 100.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             AppTextField(
                 value = state.newTransactionTitle,
                 onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
@@ -569,8 +566,7 @@ private fun TransactionDialog(
                     hint = stringResource(Res.string.main_screen_title)
                 )
 
-
-                //DropDown
+                // DropDown
             }
 
             Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))

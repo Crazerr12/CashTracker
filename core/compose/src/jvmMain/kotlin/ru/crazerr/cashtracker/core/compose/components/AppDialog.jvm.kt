@@ -36,7 +36,8 @@ actual fun AppDialog(
                 .background(
                     color = AppTheme.Colors.background,
                     shape = RoundedCornerShape(AppTheme.Dimens.dimen20)
-                ).padding(AppTheme.Dimens.dimen20),
+                )
+                .padding(AppTheme.Dimens.dimen20),
         ) {
             title()
 

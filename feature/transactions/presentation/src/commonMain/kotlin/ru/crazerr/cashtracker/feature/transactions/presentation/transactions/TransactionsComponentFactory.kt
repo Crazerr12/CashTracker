@@ -6,9 +6,7 @@ import ru.crazerr.cashtracker.core.utils.presentation.ComponentFactory
 interface TransactionsComponentFactory :
     ComponentFactory<TransactionsComponent, TransactionsComponentAction>
 
-internal class TransactionsComponentFactoryImpl(
-
-) : TransactionsComponentFactory {
+internal class TransactionsComponentFactoryImpl() : TransactionsComponentFactory {
     override fun create(
         componentContext: ComponentContext,
         onAction: (TransactionsComponentAction) -> Unit,

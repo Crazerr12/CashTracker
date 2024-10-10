@@ -128,7 +128,6 @@ internal class RootComponentImpl(
                     componentContext = componentContext,
                     onAction = { action ->
                         when (action) {
-
                         }
                     }
                 )

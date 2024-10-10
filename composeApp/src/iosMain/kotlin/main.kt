@@ -1,5 +1,5 @@
 import androidx.compose.ui.window.ComposeUIViewController
-import ru.crazerr.cashtracker.App
 import platform.UIKit.UIViewController
+import ru.crazerr.cashtracker.App
 
 fun MainViewController(): UIViewController = ComposeUIViewController { App() }

@@ -2,4 +2,6 @@ package ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDia
 
 import ru.crazerr.cashtracker.core.utils.presentation.StateHolder
 
-abstract class CreateAccountComponent : StateHolder<CreateAccountState, CreateAccountViewAction>(InitialCreateAccountState)
+abstract class CreateAccountComponent : StateHolder<CreateAccountState, CreateAccountViewAction>(
+    InitialCreateAccountState
+)

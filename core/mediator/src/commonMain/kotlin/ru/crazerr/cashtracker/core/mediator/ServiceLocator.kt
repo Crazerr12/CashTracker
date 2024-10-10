@@ -14,8 +14,7 @@ import ru.crazerr.cashtracker.feature.transactions.presentation.transactionsStor
 
 val mediatorModule = module {
     single<RootComponent.Factory> {
-        RootComponentImpl.FactoryImpl(
-        )
+        RootComponentImpl.FactoryImpl()
     }
 }
 
