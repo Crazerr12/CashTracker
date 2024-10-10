@@ -13,10 +13,10 @@ interface GoalDao {
     @Insert
     suspend fun insert(goalEntity: GoalEntity)
 
-    @Query("SELECT * FROM goal WHERE id == :id")
+    @Query("SELECT * FROM goals WHERE id == :id")
     suspend fun getGoalById(id: Long): GoalEntity
 
-    @Query("SELECT * FROM goal")
+    @Query("SELECT * FROM goals")
     fun getAll(): Flow<List<GoalEntity>>
 
     @Update

@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import cashtracker.core.compose.generated.resources.Res
 import cashtracker.core.compose.generated.resources.ic_add
+import cashtracker.core.compose.generated.resources.ic_angle_down
+import cashtracker.core.compose.generated.resources.ic_angle_up
 import cashtracker.core.compose.generated.resources.ic_arrow_back
 import cashtracker.core.compose.generated.resources.ic_arrow_forward
 import cashtracker.core.compose.generated.resources.ic_budget
@@ -88,14 +90,14 @@ object AppIcons {
 
     val AngleDown: AppIcon
         get() = AppIcon(
-            drawableResource = Res.drawable.ic_add,
-            contentDescriptionResource = Res.string.ic_add
+            drawableResource = Res.drawable.ic_angle_down,
+            contentDescriptionResource = Res.string.ic_angle_down
         )
 
     val AngleUp: AppIcon
         get() = AppIcon(
-            drawableResource = Res.drawable.ic_add,
-            contentDescriptionResource = Res.string.ic_add
+            drawableResource = Res.drawable.ic_angle_up,
+            contentDescriptionResource = Res.string.ic_angle_up
         )
 
     val Calendar: AppIcon

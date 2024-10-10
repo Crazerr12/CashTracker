@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_transaction_dialog_title">Добавить транзакцию</string>
+    <string name="create_transaction_dialog_name_hint">Название</string>
+    <string name="create_transaction_dialog_type_text">Тип транзакции</string>
+    <string name="create_transaction_dialog_type_income">Доход</string>
+    <string name="create_transaction_dialog_type_expense">Расход</string>
+    <string name="create_transaction_dialog_amount_hint">Сумма транзакции</string>
+    <string name="create_transaction_dialog_category_hint">Категория</string>
+    <string name="create_transaction_dialog_date_hint">Дата</string>
+    <string name="create_transaction_dialog_account_hint">Счёт</string>
+    <string name="create_transaction_dialog_description_hint">Описание</string>
+    <string name="create_transaction_dialog_button_cancel">Отмена</string>
+    <string name="create_transaction_dialog_button_save">Сохранить</string>
+</resources>

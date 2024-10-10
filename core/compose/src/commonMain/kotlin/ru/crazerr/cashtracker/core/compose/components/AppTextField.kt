@@ -9,7 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.TextField
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -30,9 +30,13 @@ fun AppTextField(
     value: String,
     onValueChange: (String) -> Unit,
     enabled: Boolean = true,
+    readOnly: Boolean = false,
     error: String? = "",
     hint: String? = "",
+    placeholder: String? = null,
     singleLine: Boolean = true,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     keyboardActions: KeyboardActions = KeyboardActions(),
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 ) {
@@ -40,7 +44,7 @@ fun AppTextField(
         val errorColor = AppTheme.Colors.red
         val textFieldShape = RoundedCornerShape(AppTheme.Dimens.dimen16)
 
-        TextField(
+        OutlinedTextField(
             modifier = modifier
                 .appTextFieldModifier()
                 .conditional(
@@ -53,6 +57,7 @@ fun AppTextField(
                         )
                     }
                 ),
+            textStyle = AppTheme.TextStyles.body,
             value = TextFieldValue(value, TextRange(value.length)),
             onValueChange = { newTextFieldValue ->
                 onValueChange.invoke(newTextFieldValue.text)
@@ -62,6 +67,14 @@ fun AppTextField(
                     AppTextFieldHint(text = hint)
                 }
             },
+            placeholder = {
+                if (!placeholder.isNullOrEmpty()) {
+                    AppTextFieldPlaceholder(text = placeholder)
+                }
+            },
+            readOnly = readOnly,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
             enabled = enabled,
             isError = !error.isNullOrEmpty(),
             shape = textFieldShape,
@@ -107,10 +120,21 @@ internal fun AppTextFieldSupportingText(text: String) {
 @Composable
 internal fun AppTextFieldHint(
     text: String,
-    style: TextStyle = AppTheme.TextStyles.input,
+    style: TextStyle = AppTheme.TextStyles.body,
 ) {
     BasicText(
         text = text,
-        style = style.copy(color = AppTheme.Colors.yellow),
+        style = style.copy(color = AppTheme.Colors.blue),
+    )
+}
+
+@Composable
+internal fun AppTextFieldPlaceholder(
+    text: String,
+    style: TextStyle = AppTheme.TextStyles.body,
+) {
+    BasicText(
+        text = text,
+        style = style,
     )
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_category_dialog_title">Добавить категорию</string>
+    <string name="create_category_dialog_name_hint">Название</string>
+    <string name="create_category_dialog_button_cancel">Отмена</string>
+    <string name="create_category_dialog_button_save">Сохранить</string>
+</resources>

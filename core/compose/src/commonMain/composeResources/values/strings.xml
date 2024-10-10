@@ -13,4 +13,7 @@
     <string name="ic_angle_up">Свернуть</string>
     <string name="ic_angle_down">Развернуть</string>
     <string name="ic_calendar_empty">Дата</string>
+
+    <string name="app_dialog_button_cancel_text">Отмена</string>
+    <string name="app_dialog_button_save_text">Сохранить</string>
 </resources>

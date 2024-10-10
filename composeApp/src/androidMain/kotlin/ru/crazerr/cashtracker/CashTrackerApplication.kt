@@ -1,15 +1,15 @@
 package ru.crazerr.cashtracker
 
 import android.app.Application
-import org.koin.core.component.KoinComponent
 import org.koin.android.ext.koin.androidContext
-import ru.crazerr.cashtracker.umbrella.initKoin
+import org.koin.core.component.KoinComponent
+import ru.crazerr.cashtracker.umbrella.Koin
 
 class CashTrackerApplication : Application(), KoinComponent {
     override fun onCreate() {
         super.onCreate()
 
-        initKoin {
+        Koin.setupKoin {
             androidContext(this@CashTrackerApplication)
         }
     }

@@ -34,4 +34,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
 }
 
-private const val DATABASE_VERSION = 1
+private const val DATABASE_VERSION = 2

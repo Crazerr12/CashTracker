@@ -1,7 +1,7 @@
 import ru.crazerr.cashtracker.conventionplugins.project.extensions.commonMainDependencies
 
 plugins {
-   id("feature.data.plugin")
+    id("feature.data.plugin")
 }
 
 commonMainDependencies {
