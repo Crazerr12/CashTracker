@@ -11,7 +11,6 @@ import ru.crazerr.cashtracker.core.mediator.RootCoordinator
 import ru.crazerr.cashtracker.umbrella.Koin
 import java.awt.Dimension
 
-
 fun main() {
     Koin.setupKoin()
 

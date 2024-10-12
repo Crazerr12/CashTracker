@@ -6,7 +6,6 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
 import kotlinx.serialization.Serializable
-import ru.crazerr.cashtracker.core.utils.presentation.StateHolder
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainComponent
 
 class MainStoryComponent(
@@ -36,7 +35,6 @@ class MainStoryComponent(
                 componentContext = componentContext,
                 onAction = { action ->
                     when (action) {
-
                     }
                 }
             )

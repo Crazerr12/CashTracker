@@ -5,9 +5,25 @@ actual fun String.toDateFormat(): String {
     val length = digits.length
 
     return when {
-        length <= 2 -> digits
-        length <= 4 -> "${digits.substring(0, 2)}.${digits.substring(2)}"
-        length <= 8 -> "${digits.substring(0, 2)}.${digits.substring(2, 4)}.${digits.substring(4)}"
-        else -> "${digits.substring(0, 2)}.${digits.substring(2, 4)}.${digits.substring(4, 8)}"
+        length <= MONTH_START_INDEX -> digits
+        length <= YEAR_START_INDEX -> "${digits.substring(DAY_START_INDEX, MONTH_START_INDEX)}.${
+            digits.substring(
+                MONTH_START_INDEX
+            )
+        }"
+
+        length <= YEAR_END_INDEX -> "${digits.substring(DAY_START_INDEX, MONTH_START_INDEX)}.${
+            digits.substring(
+                MONTH_START_INDEX,
+                YEAR_START_INDEX
+            )
+        }.${digits.substring(YEAR_START_INDEX)}"
+
+        else -> "${digits.substring(DAY_START_INDEX, MONTH_START_INDEX)}.${
+            digits.substring(
+                MONTH_START_INDEX,
+                YEAR_START_INDEX
+            )
+        }.${digits.substring(YEAR_START_INDEX, YEAR_END_INDEX)}"
     }
 }

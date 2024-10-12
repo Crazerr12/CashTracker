@@ -15,7 +15,9 @@ import ru.crazerr.cashtracker.feature.transaction.domain.repository.TransactionR
 val transactionDataModule = module {
     single<TransactionRepository> {
         TransactionRepositoryImpl(
-            addTransactionLocalDataSource = AddTransactionLocalDataSource(transactionDao = get<AppDatabase>().transactionDao())
+            addTransactionLocalDataSource = AddTransactionLocalDataSource(
+                transactionDao = get<AppDatabase>().transactionDao()
+            )
         )
     }
 

@@ -29,7 +29,8 @@ actual fun AppIconButton(
         modifier = modifier
             .size(IconSize)
             .background(color = backgroundTint, shape = CircleShape)
-            .clip(CircleShape).clickable(onClick = onClick)
+            .clip(CircleShape)
+            .clickable(onClick = onClick)
     ) {
         Icon(
             modifier = Modifier.align(Alignment.Center),

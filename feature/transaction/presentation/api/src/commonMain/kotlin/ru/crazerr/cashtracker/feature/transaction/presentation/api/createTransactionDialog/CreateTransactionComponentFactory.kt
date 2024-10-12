@@ -2,4 +2,5 @@ package ru.crazerr.cashtracker.feature.transaction.presentation.api.createTransa
 
 import ru.crazerr.cashtracker.core.utils.presentation.ComponentFactory
 
-interface CreateTransactionComponentFactory: ComponentFactory<CreateTransactionComponent, CreateTransactionComponentAction>
+interface CreateTransactionComponentFactory :
+    ComponentFactory<CreateTransactionComponent, CreateTransactionComponentAction>

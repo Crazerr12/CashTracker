@@ -5,10 +5,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.Font
 import cashtracker.core.compose.generated.resources.Res
 import cashtracker.core.compose.generated.resources.roboto
 import cashtracker.core.compose.generated.resources.roboto_italic
+import org.jetbrains.compose.resources.Font
 
 data object AppTextStyles {
     private val roboto: FontFamily

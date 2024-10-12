@@ -18,7 +18,7 @@ actual fun format(localDateTime: LocalDateTime): String {
 actual fun getMonthNames(languageTag: String): List<String> {
     val locale = Locale.getDefault()
     val symbols = DateFormatSymbols.getInstance(locale)
-    return symbols.months.take(12)
+    return symbols.months.take(NUMBER_OF_MONTH)
 }
 
 actual fun String.fromInput(): LocalDate {

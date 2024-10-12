@@ -102,8 +102,6 @@ internal fun RootNavigationDrawer(rootComponent: RootComponent, content: @Compos
     ) {
         content()
     }
-
-
 }
 
 @Composable

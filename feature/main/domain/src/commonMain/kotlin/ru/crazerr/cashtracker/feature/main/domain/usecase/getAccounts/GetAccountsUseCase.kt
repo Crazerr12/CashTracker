@@ -1,6 +1,5 @@
 package ru.crazerr.cashtracker.feature.main.domain.usecase.getAccounts
 
-import ru.crazerr.cashtracker.core.utils.domain.UseCase
 import ru.crazerr.cashtracker.core.utils.exception.fold
 import ru.crazerr.cashtracker.feature.main.domain.repository.AccountsRepository
 

@@ -30,6 +30,8 @@ import ru.crazerr.cashtracker.feature.transaction.presentation.createTransaction
 import ru.crazerr.cashtracker.feature.transaction.presentation.createTransactionDialog.handler.GetAccountsResultHandler
 import ru.crazerr.cashtracker.feature.transaction.presentation.createTransactionDialog.handler.GetCategoriesResultHandler
 
+private const val DATE_LENGTH = 10
+
 internal class CreateTransactionComponentImpl(
     componentContext: ComponentContext,
     private val onAction: (CreateTransactionComponentAction) -> Unit,
@@ -129,7 +131,6 @@ internal class CreateTransactionComponentImpl(
         reduceState {
             if (amount.last().isDigit()) {
                 copy(amount = amount, amountError = null)
-
             } else {
                 copy(amountError = "Поле принимает только цифры")
             }
@@ -231,10 +232,10 @@ internal class CreateTransactionComponentImpl(
     }
 
     private fun onUpdateDateString(dateString: String) {
-        if (dateString.all { it.isDigit() || it == '.' } && dateString.length <= 10) {
+        if (dateString.all { it.isDigit() || it == '.' } && dateString.length <= DATE_LENGTH) {
             reduceState { copy(dateString = dateString.toDateFormat()) }
 
-            if (dateString.length == 10) {
+            if (dateString.length == DATE_LENGTH) {
                 reduceState { copy(date = dateString.fromInput()) }
             }
         }

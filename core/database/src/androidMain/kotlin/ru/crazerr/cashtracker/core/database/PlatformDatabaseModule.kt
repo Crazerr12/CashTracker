@@ -16,5 +16,7 @@ private fun createDatabase(
 ): AppDatabase = Room.databaseBuilder<AppDatabase>(
     context = context.applicationContext,
     name = context.applicationContext.getDatabasePath(DB_FILE_NAME).absolutePath
-).setDriver(BundledSQLiteDriver()).setQueryCoroutineContext(Dispatchers.IO)
-    .createFromAsset("database/finance.db").build()
+).setDriver(BundledSQLiteDriver())
+    .setQueryCoroutineContext(Dispatchers.IO)
+    .createFromAsset("database/finance.db")
+    .build()

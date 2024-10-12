@@ -25,35 +25,27 @@ class TransactionsComponent(
     }
 
     private fun onCreateNewTransactionClick() {
-
     }
 
     private fun onManageTransactionDate() {
-
     }
 
     private fun onSearchChange() {
-
     }
 
     private fun onSelectTab() {
-
     }
 
     private fun onSetAccountFilter() {
-
     }
 
     private fun onSetCategoryFilter() {
-
     }
 
     private fun onSetDateFilter() {
-
     }
 
     private fun onTransactionClick() {
-
     }
 
     private fun onManageTransactionHeader(header: TransactionHeader) {

@@ -131,16 +131,16 @@ private fun FilterRow(modifier: Modifier = Modifier) {
 @Composable
 private fun FilterItem(onClick: () -> Unit) {
     Box {
-        Row(modifier = Modifier
-            .clickable { onClick() }
-            .clip(RoundedCornerShape(AppTheme.Dimens.dimen16))
-            .border(
-                border = BorderStroke(width = 1.dp, color = AppTheme.Colors.black),
-                shape = RoundedCornerShape(AppTheme.Dimens.dimen16)
-            ),
+        Row(
+            modifier = Modifier
+                .clickable { onClick() }
+                .clip(RoundedCornerShape(AppTheme.Dimens.dimen16))
+                .border(
+                    border = BorderStroke(width = 1.dp, color = AppTheme.Colors.black),
+                    shape = RoundedCornerShape(AppTheme.Dimens.dimen16)
+                ),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
         }
     }
 }
@@ -386,7 +386,6 @@ private fun SpendingDiagram() {
 
 @Composable
 private fun YandexAd(modifier: Modifier = Modifier) {
-
 }
 
 @Composable

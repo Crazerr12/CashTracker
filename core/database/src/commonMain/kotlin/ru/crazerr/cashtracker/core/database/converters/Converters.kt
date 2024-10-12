@@ -5,7 +5,6 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import ru.crazerr.cashtracker.core.utils.model.TransactionType
 
-
 class Converters {
 
     @TypeConverter

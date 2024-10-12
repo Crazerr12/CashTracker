@@ -135,7 +135,11 @@ private fun CurrencyRow(
                 Icon(
                     tint = AppTheme.Colors.black,
                     painter = if (state.isExpanded) AppIcons.AngleUp.painter else AppIcons.AngleDown.painter,
-                    contentDescription = if (state.isExpanded) AppIcons.AngleUp.contentDescription else AppIcons.AngleDown.contentDescription,
+                    contentDescription = if (state.isExpanded) {
+                        AppIcons.AngleUp.contentDescription
+                    } else {
+                        AppIcons.AngleDown.contentDescription
+                    },
                 )
             }
 

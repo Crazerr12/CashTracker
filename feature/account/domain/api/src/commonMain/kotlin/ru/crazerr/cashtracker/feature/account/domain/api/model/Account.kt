@@ -6,4 +6,3 @@ data class Account(
     val balance: Float,
     val currency: String,
 )
-

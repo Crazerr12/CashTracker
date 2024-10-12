@@ -10,6 +10,12 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
+internal const val NUMBER_OF_MONTH = 12
+internal const val DATE_START_PADDING = 2
+internal const val YEAR_PART = 0
+internal const val MONTH_PART = 1
+internal const val DAY_PART = 2
+
 fun LocalDateTime.Companion.now(): LocalDateTime {
     return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 }

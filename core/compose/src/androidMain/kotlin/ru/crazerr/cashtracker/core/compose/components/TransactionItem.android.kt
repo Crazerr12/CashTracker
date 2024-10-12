@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import kotlinx.datetime.LocalDate
 import ru.crazerr.cashtracker.core.utils.model.TransactionType
 
+@Suppress("LongParameterList")
 @Composable
 actual fun TransactionItem(
     modifier: Modifier,

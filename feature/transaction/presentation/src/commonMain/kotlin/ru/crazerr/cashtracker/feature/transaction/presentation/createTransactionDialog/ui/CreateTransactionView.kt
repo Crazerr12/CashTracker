@@ -175,6 +175,7 @@ private fun CreateTransactionViewContent(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 private fun <T> DropdownRow(
     modifier: Modifier = Modifier,
@@ -209,7 +210,8 @@ private fun <T> DropdownRow(
                                 text = if (item is Category) item.name else if (item is Account) item.name else "",
                                 style = AppTheme.TextStyles.body.copy(color = AppTheme.Colors.black)
                             )
-                        }, onClick = { onItemSelected(item) }
+                        },
+                        onClick = { onItemSelected(item) }
                     )
                 }
             }
@@ -303,12 +305,13 @@ private fun DateRow(
     )
 
     LaunchedEffect(datePickerState.selectedDateMillis) {
-        if (datePickerState.selectedDateMillis != null)
+        if (datePickerState.selectedDateMillis != null) {
             obtainViewAction(
                 CreateTransactionViewAction.SetDate(
                     date = datePickerState.selectedDateMillis!!.toLocalDate()
                 )
             )
+        }
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
