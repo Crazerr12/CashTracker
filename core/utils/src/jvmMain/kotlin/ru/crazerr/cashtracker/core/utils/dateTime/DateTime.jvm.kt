@@ -11,6 +11,7 @@ import java.text.DateFormatSymbols
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+
 actual fun format(localDateTime: LocalDateTime): String {
     return DateTimeFormatter
         .ofPattern("dd/MM/yyyy - HH:mm", Locale.getDefault())
@@ -20,12 +21,12 @@ actual fun format(localDateTime: LocalDateTime): String {
 actual fun getMonthNames(languageTag: String): List<String> {
     val locale = Locale.getDefault()
     val symbols = DateFormatSymbols.getInstance(locale)
-    return symbols.months.take(12)
+    return symbols.months.take(NUMBER_OF_MONTH)
 }
 
 actual fun String.fromInput(): LocalDate {
     val parts = this.split(".")
-    val formattedDate = "${parts[2]}-${parts[1]}-${parts[0]}"
+    val formattedDate = "${parts[DAY_PART]}-${parts[MONTH_PART]}-${parts[YEAR_PART]}"
     return LocalDate.parse(formattedDate)
 }
 
@@ -35,8 +36,8 @@ actual fun Long.toLocalDate(): LocalDate {
 }
 
 actual fun LocalDate.toInput(): String {
-    val day = this.dayOfMonth.toString().padStart(2, '0')
-    val month = this.monthNumber.toString().padStart(2, '0')
+    val day = this.dayOfMonth.toString().padStart(DATE_START_PADDING, '0')
+    val month = this.monthNumber.toString().padStart(DATE_START_PADDING, '0')
     val year = this.year
 
     return "$day.$month.$year"

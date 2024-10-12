@@ -10,7 +10,7 @@ import ru.crazerr.cashtracker.core.compose.theme.AppTheme
 import ru.crazerr.cashtracker.core.mediator.RootComponent
 import ru.crazerr.cashtracker.core.mediator.RootCoordinator
 
-class AppActivity : ComponentActivity() {
+class CashActivity : ComponentActivity() {
     private val rootComponentFactory: RootComponent.Factory by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
