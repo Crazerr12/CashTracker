@@ -1,65 +1,110 @@
 package ru.crazerr.cashtracker.feature.main.data.transactions
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withContext
-import ru.crazerr.cashtracker.core.database.account.AccountEntity
+import ru.crazerr.cashtracker.core.database.account.model.AccountWithCurrency
 import ru.crazerr.cashtracker.core.database.category.CategoryEntity
-import ru.crazerr.cashtracker.core.database.transaction.TransactionEntity
-import ru.crazerr.cashtracker.feature.main.data.transactions.dataSource.AccountsDataSource
-import ru.crazerr.cashtracker.feature.main.data.transactions.dataSource.CategoriesDataSource
-import ru.crazerr.cashtracker.feature.main.data.transactions.dataSource.TransactionsDataSource
-import ru.crazerr.cashtracker.feature.main.domain.model.Account
-import ru.crazerr.cashtracker.feature.main.domain.model.Category
-import ru.crazerr.cashtracker.feature.main.domain.model.Transaction
+import ru.crazerr.cashtracker.core.database.currency.CurrencyEntity
+import ru.crazerr.cashtracker.core.database.transaction.model.CategoryShareDbo
+import ru.crazerr.cashtracker.core.database.transaction.model.TransactionWithCategoryAndAccountDbo
+import ru.crazerr.cashtracker.currency.domain.api.model.Currency
+import ru.crazerr.cashtracker.feature.account.domain.api.model.Account
+import ru.crazerr.cashtracker.feature.category.domain.api.model.Category
+import ru.crazerr.cashtracker.feature.main.data.transactions.dataSource.TransactionsLocalDataSource
+import ru.crazerr.cashtracker.feature.main.domain.model.CategoryShare
+import ru.crazerr.cashtracker.feature.main.domain.model.ExpensesAndIncome
 import ru.crazerr.cashtracker.feature.main.domain.repository.TransactionsRepository
+import ru.crazerr.cashtracker.feature.transaction.domain.api.model.Transaction
 
 internal class TransactionsRepositoryImpl(
-    private val transactionsDataSource: TransactionsDataSource,
-    private val accountsDataSource: AccountsDataSource,
-    private val categoriesDataSource: CategoriesDataSource,
+    private val transactionsLocalDataSource: TransactionsLocalDataSource,
 ) : TransactionsRepository {
 
-    override suspend fun getMonthlyTransactions(): Result<List<Transaction>> {
-        return withContext(Dispatchers.IO) {
-            val accountsDeferred = async { accountsDataSource.getAccounts() }
-            val categoriesDeferred = async { categoriesDataSource.getCategories() }
+    override suspend fun getMonthlyTransactions(
+        date: String,
+        limit: Int,
+    ): Result<List<Transaction>> {
+        return try {
+            val transactionEntities =
+                transactionsLocalDataSource.getMonthlyTransactions(
+                    date = date,
+                    limit = limit
+                ).first()
+            Result.success(transactionEntities.toTransactions())
+        } catch (ex: Exception) {
+            Result.failure(ex)
+        }
+    }
 
-            val transactionEntities = transactionsDataSource.getMonthlyTransactions().first()
+    override suspend fun getCategoryShares(date: String): Result<List<CategoryShare>> {
+        return try {
+            val categorySharesDbo =
+                transactionsLocalDataSource.getCategoryShares(date = date).first()
+            Result.success(categorySharesDbo.toCategoryShares())
+        } catch (ex: Exception) {
+            Result.failure(ex)
+        }
+    }
 
-            val accounts = accountsDeferred.await().first()
-            val categories = categoriesDeferred.await().first()
-            val transactions = transactionEntities.toTransactions(accounts, categories)
-
-            Result.success(transactions)
+    override suspend fun getExpensesAndIncomeByMonth(date: String): Result<ExpensesAndIncome> {
+        return try {
+            val expensesAndIncomeDbo =
+                transactionsLocalDataSource.getExpensesAndIncomeByMonth(date = date).first()
+            Result.success(
+                ExpensesAndIncome(
+                    totalExpenses = expensesAndIncomeDbo.totalExpenses,
+                    totalIncome = expensesAndIncomeDbo.totalIncome
+                )
+            )
+        } catch (ex: Exception) {
+            Result.failure(ex)
         }
     }
 }
 
-private fun List<TransactionEntity>.toTransactions(
-    accounts: List<AccountEntity>,
-    categories: List<CategoryEntity>,
-) =
-    map { transaction ->
-        val category = categories.first { it.id == transaction.categoryId }
-        val account = accounts.first { it.id == transaction.accountId }
+internal fun List<TransactionWithCategoryAndAccountDbo>.toTransactions() =
+    this.map { transaction ->
         Transaction(
             id = transaction.id,
             name = transaction.name,
             amount = transaction.amount,
             type = transaction.type,
             date = transaction.date,
-            category = Category(
-                id = category.id,
-                name = category.name
-            ),
-            account = Account(
-                id = account.id,
-                name = account.name,
-                balance = account.balance,
-                currency = account.currency
-            ),
+            category = transaction.category.toCategory(),
+            account = transaction.account.toAccount(),
             description = transaction.description
+        )
+    }
+
+internal fun CategoryEntity.toCategory() = Category(
+    id = id,
+    name = name,
+    iconId = iconId,
+    color = color,
+)
+
+internal fun AccountWithCurrency.toAccount() = Account(
+    id = id,
+    name = name,
+    balance = balance,
+    currency = currency.toCurrency()
+)
+
+internal fun CurrencyEntity.toCurrency() = Currency(
+    id = id,
+    name = name,
+    code = code,
+    symbol = symbol,
+    symbolNative = symbolNative
+)
+
+internal fun List<CategoryShareDbo>.toCategoryShares() =
+    map {
+        CategoryShare(
+            id = it.id,
+            name = it.name,
+            sum = it.sum,
+            percent = 0f,
+            color = it.color,
+            iconId = it.iconId
         )
     }

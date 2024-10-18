@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import ru.crazerr.cashtracker.core.compose.theme.AppTheme
 import ru.crazerr.cashtracker.core.compose.utils.conditional
@@ -35,6 +36,7 @@ fun AppTextField(
     hint: String? = "",
     placeholder: String? = null,
     singleLine: Boolean = true,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     keyboardActions: KeyboardActions = KeyboardActions(),
@@ -57,6 +59,7 @@ fun AppTextField(
                         )
                     }
                 ),
+            visualTransformation = visualTransformation,
             textStyle = AppTheme.TextStyles.body,
             value = TextFieldValue(value, TextRange(value.length)),
             onValueChange = { newTextFieldValue ->
@@ -81,7 +84,8 @@ fun AppTextField(
             colors = appTextFieldColors(),
             singleLine = singleLine,
             keyboardActions = keyboardActions,
-            keyboardOptions = keyboardOptions
+            keyboardOptions = keyboardOptions,
+
         )
 
         if (!error.isNullOrEmpty()) {

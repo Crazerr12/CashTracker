@@ -129,7 +129,7 @@ internal class CreateTransactionComponentImpl(
 
     private fun onAmountChange(amount: String) {
         reduceState {
-            if (amount.last().isDigit()) {
+            if (amount.lastOrNull()?.isDigit() == true || amount.isEmpty()) {
                 copy(amount = amount, amountError = null)
             } else {
                 copy(amountError = "Поле принимает только цифры")
@@ -182,7 +182,7 @@ internal class CreateTransactionComponentImpl(
                         transactionType = state.value.transactionType,
                         amount = state.value.amount.toFloat(),
                         categoryId = state.value.selectedCategory.id,
-                        accountId = state.value.selectedAccount.id,
+                        account = state.value.selectedAccount,
                         date = state.value.date,
                         description = state.value.description
                     )
@@ -192,7 +192,7 @@ internal class CreateTransactionComponentImpl(
                     result = result,
                     delegate = this@CreateTransactionComponentImpl,
                     onAction = { onAction(CreateTransactionComponentAction.TransactionCreated(it)) }
-                )
+                ).handle()
             }
         }
     }

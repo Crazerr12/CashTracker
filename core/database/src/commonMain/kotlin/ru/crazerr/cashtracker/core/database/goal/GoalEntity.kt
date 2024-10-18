@@ -9,7 +9,10 @@ import kotlinx.datetime.LocalDate
 data class GoalEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
-    @ColumnInfo(name = "target_amount") val targetAmount: Float,
     @ColumnInfo(name = "current_amount") val currentAmount: Float,
-    @ColumnInfo(name = "due_date") val dueDate: LocalDate,
+    @ColumnInfo(name = "target_amount") val targetAmount: Float,
+    @ColumnInfo(name = "start_date") val startDate: LocalDate,
+    @ColumnInfo(name = "end_date") val endDate: LocalDate,
+    val priority: Int,
+    val description: String?,
 )

@@ -4,7 +4,7 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -27,10 +27,10 @@ actual fun AppIconButton(
 ) {
     Box(
         modifier = modifier
-            .size(IconSize)
             .background(color = backgroundTint, shape = CircleShape)
             .clip(CircleShape)
             .clickable(onClick = onClick)
+            .padding(AppTheme.Dimens.dimen4)
     ) {
         Icon(
             modifier = Modifier.align(Alignment.Center),

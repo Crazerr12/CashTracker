@@ -6,6 +6,9 @@ plugins {
 
 commonMainDependencies {
     implementation(libs.kotlinx.datetime)
+    api(project(":feature:transaction:domain:api"))
+    api(project(":feature:account:domain:api"))
+    api(project(":feature:category:domain:api"))
 }
 
 android {

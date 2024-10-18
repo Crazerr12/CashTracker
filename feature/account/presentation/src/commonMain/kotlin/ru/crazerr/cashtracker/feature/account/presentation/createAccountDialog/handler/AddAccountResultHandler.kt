@@ -25,7 +25,7 @@ internal class AddAccountResultHandler(
                 id = id,
                 name = delegate.state.value.name,
                 balance = delegate.state.value.balance.toFloat(),
-                currency = delegate.state.value.currency,
+                currency = delegate.state.value.selectedCurrency,
             )
         )
     }

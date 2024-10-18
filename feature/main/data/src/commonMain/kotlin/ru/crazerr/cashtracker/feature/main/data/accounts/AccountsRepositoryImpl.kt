@@ -1,9 +1,10 @@
 package ru.crazerr.cashtracker.feature.main.data.accounts
 
 import kotlinx.coroutines.flow.first
-import ru.crazerr.cashtracker.core.database.account.AccountEntity
+import ru.crazerr.cashtracker.core.database.account.model.AccountWithCurrency
+import ru.crazerr.cashtracker.currency.domain.api.model.Currency
+import ru.crazerr.cashtracker.feature.account.domain.api.model.Account
 import ru.crazerr.cashtracker.feature.main.data.transactions.dataSource.AccountsDataSource
-import ru.crazerr.cashtracker.feature.main.domain.model.Account
 import ru.crazerr.cashtracker.feature.main.domain.repository.AccountsRepository
 
 internal class AccountsRepositoryImpl(
@@ -11,8 +12,7 @@ internal class AccountsRepositoryImpl(
 ) : AccountsRepository {
     override suspend fun getAllAccounts(): Result<List<Account>> {
         return try {
-            val flow = accountsDataSource.getAccounts()
-            val accountEntities = flow.first()
+            val accountEntities = accountsDataSource.getAccounts().first()
             val accounts = accountEntities.toAccounts()
             Result.success(accounts)
         } catch (e: Exception) {
@@ -21,12 +21,18 @@ internal class AccountsRepositoryImpl(
     }
 }
 
-fun List<AccountEntity>.toAccounts() =
-    map { accountEntity ->
+fun List<AccountWithCurrency>.toAccounts() =
+    map { accountWithCurrency ->
         Account(
-            id = accountEntity.id,
-            name = accountEntity.name,
-            balance = accountEntity.balance,
-            currency = accountEntity.currency
+            id = accountWithCurrency.id,
+            name = accountWithCurrency.name,
+            balance = accountWithCurrency.balance,
+            currency = Currency(
+                id = accountWithCurrency.currency.id,
+                name = accountWithCurrency.currency.name,
+                code = accountWithCurrency.currency.code,
+                symbol = accountWithCurrency.currency.symbol,
+                symbolNative = accountWithCurrency.currency.symbolNative
+            )
         )
     }

@@ -1,9 +1,9 @@
 package ru.crazerr.cashtracker.feature.main.presentation.main.handler
 
 import ru.crazerr.cashtracker.core.utils.ResultHandler
-import ru.crazerr.cashtracker.feature.main.domain.model.Transaction
 import ru.crazerr.cashtracker.feature.main.domain.usecase.getTransactions.GetTransactionsResult
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainComponent
+import ru.crazerr.cashtracker.feature.transaction.domain.api.model.Transaction
 
 class GetTransactionsResultHandler(
     private val result: GetTransactionsResult,

@@ -2,6 +2,7 @@ package ru.crazerr.cashtracker.feature.main.presentation.main.ui
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -10,56 +11,56 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
-import androidx.compose.material.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import cashtracker.feature.main.presentation.generated.resources.Res
 import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_accounts_title
 import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_current_balance_title
 import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_current_expenses_title
 import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_current_income_title
-import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_analyze
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_import_data
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_new_account
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_new_budget
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_new_goal
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_new_transaction
 import cashtracker.feature.main.presentation.generated.resources.main_screen_expenses_by_categories_card_title
+import cashtracker.feature.main.presentation.generated.resources.main_screen_percent_example
+import cashtracker.feature.main.presentation.generated.resources.main_screen_ruble_example
 import cashtracker.feature.main.presentation.generated.resources.main_screen_title
-import cashtracker.feature.main.presentation.generated.resources.main_screen_transactions_card_tab_futures
-import cashtracker.feature.main.presentation.generated.resources.main_screen_transactions_card_tab_recently
 import cashtracker.feature.main.presentation.generated.resources.main_screen_transactions_card_title
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.datetime.LocalDate
@@ -69,19 +70,26 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import ru.crazerr.cashtracker.core.compose.components.AddButton
 import ru.crazerr.cashtracker.core.compose.components.AppIconButton
-import ru.crazerr.cashtracker.core.compose.components.AppTextField
-import ru.crazerr.cashtracker.core.compose.components.TransactionItem
 import ru.crazerr.cashtracker.core.compose.icons.AppIcons
 import ru.crazerr.cashtracker.core.compose.theme.AppTheme
 import ru.crazerr.cashtracker.core.utils.dateTime.getMonthNames
+import ru.crazerr.cashtracker.core.utils.dateTime.toInput
+import ru.crazerr.cashtracker.core.utils.formatter.CurrencyFormatter
 import ru.crazerr.cashtracker.core.utils.model.TransactionType
+import ru.crazerr.cashtracker.feature.account.domain.api.model.Account
 import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountViewFactory
-import ru.crazerr.cashtracker.feature.main.domain.model.Account
-import ru.crazerr.cashtracker.feature.main.domain.model.Transaction
+import ru.crazerr.cashtracker.feature.main.domain.model.CategoryShare
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainComponent
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainState
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainViewAction
+import ru.crazerr.cashtracker.feature.transaction.domain.api.model.Transaction
 import ru.crazerr.cashtracker.feature.transaction.presentation.api.createTransactionDialog.CreateTransactionViewFactory
+import kotlin.math.min
+
+private const val BALANCE_CARD_TITLE_MAX_LINE = 1
+private const val TEN_TRANSACTIONS_TO_SHOW = 10
+private const val FIFTEEN_TRANSACTIONS_TO_SHOW = 15
+private const val TWENTY_TRANSACTIONS_TO_SHOW = 20
 
 @Composable
 actual fun MainView(component: MainComponent) {
@@ -98,6 +106,14 @@ actual fun MainView(component: MainComponent) {
             is MainComponent.DialogChild.CreateTransaction -> {
                 val createTransactionDialog = koinInject<CreateTransactionViewFactory>()
                 createTransactionDialog.create(modifier = Modifier, component = it.component)
+            }
+
+            MainComponent.DialogChild.CreateBudget -> {
+                // TODO
+            }
+
+            MainComponent.DialogChild.CreateGoal -> {
+                // TODO
             }
         }
     }
@@ -131,7 +147,7 @@ private fun MainViewContent(
 
                 Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen12))
 
-                CategoryExpensesCard(modifier = Modifier.fillMaxHeight().weight(1f))
+                CategorySharesCard(modifier = Modifier.fillMaxHeight().weight(1f), state = state)
             }
 
             Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen20))
@@ -145,6 +161,7 @@ private fun MainViewContent(
     }
 }
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun MainViewHeader(obtainViewAction: (MainViewAction) -> Unit) {
@@ -194,7 +211,7 @@ private fun MainViewHeader(obtainViewAction: (MainViewAction) -> Unit) {
 
         AddButton(
             text = stringResource(Res.string.main_screen_button_text_new_account),
-            onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
+            onClick = { obtainViewAction(MainViewAction.ManageAccountDialog) },
             shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
             painter = AppIcons.PlusIcon.painter,
             contentDescription = AppIcons.PlusIcon.contentDescription,
@@ -205,17 +222,6 @@ private fun MainViewHeader(obtainViewAction: (MainViewAction) -> Unit) {
 
         AddButton(
             text = stringResource(Res.string.main_screen_button_text_import_data),
-            onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
-            shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
-            painter = AppIcons.PlusIcon.painter,
-            contentDescription = AppIcons.PlusIcon.contentDescription,
-            background = AppTheme.Colors.blue,
-        )
-
-        Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen12))
-
-        AddButton(
-            text = stringResource(Res.string.main_screen_button_text_analyze),
             onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
             shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
             painter = AppIcons.PlusIcon.painter,
@@ -234,7 +240,7 @@ private fun ChangeDate(
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         AppIconButton(
             icon = AppIcons.ArrowBack.painter,
-            onClick = { obtainViewAction(MainViewAction.PreviousButtonClick) },
+            onClick = { obtainViewAction(MainViewAction.PreviousMonthButtonClick) },
             contentDescription = AppIcons.ArrowBack.contentDescription,
             iconTint = AppTheme.Colors.background,
             backgroundTint = AppTheme.Colors.black,
@@ -255,7 +261,7 @@ private fun ChangeDate(
 
         AppIconButton(
             icon = AppIcons.ArrowForward.painter,
-            onClick = { obtainViewAction(MainViewAction.NextButtonClick) },
+            onClick = { obtainViewAction(MainViewAction.NextMonthButtonClick) },
             contentDescription = AppIcons.ArrowForward.contentDescription,
             iconTint = AppTheme.Colors.black,
             backgroundTint = AppTheme.Colors.white,
@@ -269,129 +275,188 @@ private fun TransactionsCard(
     state: MainState,
     obtainViewAction: (MainViewAction) -> Unit,
 ) {
-    var tabIndex by remember { mutableStateOf(0) }
-    val tabs = listOf(
-        stringResource(Res.string.main_screen_transactions_card_tab_recently),
-        stringResource(Res.string.main_screen_transactions_card_tab_futures)
-    )
-
     Card(modifier = modifier) {
         Column(modifier = Modifier.padding(all = AppTheme.Dimens.dimen20)) {
-            BasicText(
-                text = stringResource(resource = Res.string.main_screen_transactions_card_title),
-                style = AppTheme.TextStyles.title.copy(color = AppTheme.Colors.black)
-            )
-
-            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen20))
-
-            Row(modifier = Modifier.fillMaxWidth()) {
-                TabRow(
-                    modifier = Modifier.weight(1f),
-                    selectedTabIndex = tabIndex,
-                ) {
-                    tabs.forEachIndexed { index, title ->
-                        Tab(
-                            text = { BasicText(text = title) },
-                            selected = tabIndex == index,
-                            onClick = { tabIndex = index }
-                        )
-                    }
-                }
-
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                        .defaultMinSize(minWidth = AppTheme.Dimens.dimen10)
+            Row(
+                modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BasicText(
+                    text = stringResource(resource = Res.string.main_screen_transactions_card_title),
+                    style = AppTheme.TextStyles.title.copy(color = AppTheme.Colors.black)
                 )
 
-                Box(modifier = Modifier) {
-                    Row(
-                        modifier = Modifier
-                            .clickable(
-                                onClick = { obtainViewAction(MainViewAction.ManageDropdownMenu) }
-                            )
-                            .clip(shape = RoundedCornerShape(AppTheme.Dimens.dimen10))
-                            .border(
-                                border = BorderStroke(
-                                    width = 1.dp,
-                                    color = AppTheme.Colors.black
-                                ),
-                                shape = RoundedCornerShape(AppTheme.Dimens.dimen10)
+                Spacer(modifier = Modifier.weight(1f).widthIn(min = AppTheme.Dimens.dimen10))
+
+                Box(
+                    modifier = Modifier
+                        .clip(shape = RoundedCornerShape(AppTheme.Dimens.dimen8))
+                        .border(
+                            border = BorderStroke(
+                                width = 1.dp,
+                                color = AppTheme.Colors.black
                             ),
+                            shape = RoundedCornerShape(AppTheme.Dimens.dimen8)
+                        )
+                        .clickable {
+                            obtainViewAction(MainViewAction.ManageTransactionsToShowDropdownMenu)
+                        }
+                        .padding(AppTheme.Dimens.dimen4),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         BasicText(
-                            text = state.itemsToShow.toString(),
+                            text = state.transactionsToShow.toString(),
                             style = AppTheme.TextStyles.body.copy()
                         )
 
                         Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen4))
 
                         Icon(
-                            painter = AppIcons.ArrowBack.painter,
-                            contentDescription = AppIcons.ArrowBack.contentDescription
+                            painter = if (state.itemsToShowIsExpanded) {
+                                AppIcons.AngleUp.painter
+                            } else {
+                                AppIcons.AngleDown.painter
+                            },
+                            contentDescription = if (state.itemsToShowIsExpanded) {
+                                AppIcons.AngleUp.contentDescription
+                            } else {
+                                AppIcons.AngleDown.contentDescription
+                            },
                         )
                     }
 
-                    DropdownMenu(
-                        expanded = state.itemsToShowIsExpanded,
-                        onDismissRequest = { obtainViewAction(MainViewAction.ManageDropdownMenu) },
-                    ) {
-                        DropdownMenuItem(
-                            text = {
-                                BasicText(
-                                    text = 10.toString(),
-                                    style = AppTheme.TextStyles.body
-                                )
-                            },
-                            onClick = { obtainViewAction(MainViewAction.SetItemsToShow(10)) },
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                BasicText(
-                                    text = 15.toString(),
-                                    style = AppTheme.TextStyles.body
-                                )
-                            },
-                            onClick = { obtainViewAction(MainViewAction.SetItemsToShow(15)) },
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                BasicText(
-                                    text = 20.toString(),
-                                    style = AppTheme.TextStyles.body
-                                )
-                            },
-                            onClick = { obtainViewAction(MainViewAction.SetItemsToShow(20)) },
-                        )
-                    }
+                    TransactionsToShowDropdown(state = state, obtainViewAction = obtainViewAction)
                 }
             }
-            when (tabIndex) {
-                0 -> TransactionsList(
-                    transactions = state.transactions,
-                    itemsToShow = state.itemsToShow
-                )
 
-                1 -> TransactionsList(
-                    transactions = state.transactions.filter { transaction: Transaction ->
-                        transaction.type == TransactionType.EXPENSE
-                    },
-                    itemsToShow = state.itemsToShow
+            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen20))
+
+            TransactionsList(transactions = state.transactions)
+        }
+    }
+}
+
+@Composable
+private fun TransactionsToShowDropdown(
+    modifier: Modifier = Modifier,
+    state: MainState,
+    obtainViewAction: (MainViewAction) -> Unit,
+) {
+    DropdownMenu(
+        modifier = modifier,
+        expanded = state.itemsToShowIsExpanded,
+        onDismissRequest = { obtainViewAction(MainViewAction.ManageTransactionsToShowDropdownMenu) },
+    ) {
+        DropdownMenuItem(
+            text = {
+                BasicText(
+                    text = TEN_TRANSACTIONS_TO_SHOW.toString(),
+                    style = AppTheme.TextStyles.body
                 )
+            },
+            onClick = {
+                obtainViewAction(
+                    MainViewAction.SetTransactionsToShow(
+                        TEN_TRANSACTIONS_TO_SHOW
+                    )
+                )
+            },
+        )
+        DropdownMenuItem(
+            text = {
+                BasicText(
+                    text = FIFTEEN_TRANSACTIONS_TO_SHOW.toString(),
+                    style = AppTheme.TextStyles.body
+                )
+            },
+            onClick = {
+                obtainViewAction(
+                    MainViewAction.SetTransactionsToShow(
+                        FIFTEEN_TRANSACTIONS_TO_SHOW
+                    )
+                )
+            },
+        )
+        DropdownMenuItem(
+            text = {
+                BasicText(
+                    text = TWENTY_TRANSACTIONS_TO_SHOW.toString(),
+                    style = AppTheme.TextStyles.body
+                )
+            },
+            onClick = {
+                obtainViewAction(
+                    MainViewAction.SetTransactionsToShow(
+                        TWENTY_TRANSACTIONS_TO_SHOW
+                    )
+                )
+            },
+        )
+    }
+}
+
+@Composable
+private fun CategorySharesCard(modifier: Modifier = Modifier, state: MainState) {
+    Card(modifier = modifier) {
+        Column(modifier = Modifier.fillMaxSize().padding(all = AppTheme.Dimens.dimen20)) {
+            BasicText(
+                text = stringResource(Res.string.main_screen_expenses_by_categories_card_title),
+                style = AppTheme.TextStyles.title.copy(color = AppTheme.Colors.black)
+            )
+
+            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
+
+            Row(modifier = Modifier.fillMaxWidth()) {
+                CategorySharesChart(modifier = Modifier.weight(1f), state.categoryShares)
+
+                Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen12))
+
+                LazyColumn(
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(vertical = AppTheme.Dimens.dimen8)
+                ) {
+                    items(state.categoryShares) {
+                        CategorySharesItem(categoryShare = it)
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun CategoryExpensesCard(modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
-        Row(modifier = Modifier.padding(all = AppTheme.Dimens.dimen20)) {
-            BasicText(
-                text = stringResource(Res.string.main_screen_expenses_by_categories_card_title),
-                style = AppTheme.TextStyles.title.copy(color = AppTheme.Colors.black)
-            )
-        }
+private fun CategorySharesItem(modifier: Modifier = Modifier, categoryShare: CategoryShare) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(AppTheme.Dimens.dimen14)
+                .clip(shape = CircleShape)
+                .background(color = Color(categoryShare.color), shape = CircleShape)
+        )
+
+        Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen4))
+
+        BasicText(
+            text = categoryShare.name,
+            style = AppTheme.TextStyles.subtitle.copy(color = AppTheme.Colors.black)
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen16))
+
+        BasicText(
+            text = stringResource(
+                Res.string.main_screen_percent_example,
+                CurrencyFormatter().format(categoryShare.percent)
+            ),
+            style = AppTheme.TextStyles.subtitle.copy(color = AppTheme.Colors.black)
+        )
     }
 }
 
@@ -407,28 +472,7 @@ private fun BalanceCard(
                 .fillMaxWidth()
                 .padding(bottom = AppTheme.Dimens.dimen20)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(all = AppTheme.Dimens.dimen20),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                BalanceCardTitle(
-                    title = stringResource(Res.string.main_screen_balance_card_current_balance_title),
-                    sum = 500.toString()
-                )
-
-                BalanceCardTitle(
-                    title = stringResource(Res.string.main_screen_balance_card_current_expenses_title),
-                    sum = 700.toString(),
-                    color = AppTheme.Colors.red
-                )
-
-                BalanceCardTitle(
-                    title = stringResource(Res.string.main_screen_balance_card_current_income_title),
-                    sum = 800.toString(),
-                    color = AppTheme.Colors.green
-                )
-            }
+            BalanceCardTitleRow(state = state)
 
             BasicText(
                 modifier = Modifier.padding(horizontal = AppTheme.Dimens.dimen20),
@@ -438,22 +482,60 @@ private fun BalanceCard(
 
             Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen8))
 
-            LazyRow(modifier = Modifier.fillMaxSize()) {
-                items(40) {
-                    Card(
-                        modifier = Modifier.fillMaxWidth().size(100.dp)
-                            .background(color = AppTheme.Colors.red)
-                    ) {
-                        Button(
-                            onClick = {},
-                            content = {
-                                BasicText(text = "Нажми")
-                            }
-                        )
-                    }
+            LazyRow(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(
+                    start = AppTheme.Dimens.dimen20,
+                    end = AppTheme.Dimens.dimen20,
+                ),
+            ) {
+                items(state.accounts) {
+                    AccountItem(account = it, obtainViewAction = obtainViewAction)
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun BalanceCardTitleRow(modifier: Modifier = Modifier, state: MainState) {
+    Row(
+        modifier = modifier.fillMaxWidth()
+            .padding(all = AppTheme.Dimens.dimen20),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        BalanceCardTitle(
+            modifier = Modifier.weight(1f),
+            title = stringResource(Res.string.main_screen_balance_card_current_balance_title),
+            sum = stringResource(
+                Res.string.main_screen_ruble_example,
+                state.currentBalance
+            )
+        )
+
+        Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen16))
+
+        BalanceCardTitle(
+            modifier = Modifier.weight(1f),
+            title = stringResource(Res.string.main_screen_balance_card_current_expenses_title),
+            sum = stringResource(
+                Res.string.main_screen_ruble_example,
+                state.expensesByMonth
+            ),
+            color = AppTheme.Colors.red
+        )
+
+        Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen16))
+
+        BalanceCardTitle(
+            modifier = Modifier.weight(1f),
+            title = stringResource(Res.string.main_screen_balance_card_current_income_title),
+            sum = stringResource(
+                Res.string.main_screen_ruble_example,
+                state.incomeByMonth
+            ),
+            color = AppTheme.Colors.green
+        )
     }
 }
 
@@ -465,20 +547,32 @@ private fun AccountItem(
 ) {
     Column(
         modifier = modifier
-            .padding(AppTheme.Dimens.dimen8)
-            .width(AppTheme.Dimens.dimen100)
+            .fillMaxSize()
+            .background(
+                color = AppTheme.Colors.gray,
+                shape = RoundedCornerShape(AppTheme.Dimens.dimen8)
+            )
+            .clip(shape = RoundedCornerShape(AppTheme.Dimens.dimen8))
             .clickable { obtainViewAction(MainViewAction.AccountClick(account.id)) }
+            .padding(all = AppTheme.Dimens.dimen10),
+        verticalArrangement = Arrangement.Center
     ) {
         BasicText(
+            modifier = Modifier,
             text = account.name,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
             style = AppTheme.TextStyles.body.copy(color = AppTheme.Colors.black)
         )
 
         Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen4))
 
         BasicText(
-            text = account.balance.toString() + " ${account.currency}",
-            style = AppTheme.TextStyles.subtitle.copy(AppTheme.Colors.black)
+            modifier = Modifier,
+            text = "${account.balance} ${account.currency.symbolNative}",
+            style = AppTheme.TextStyles.subtitle.copy(
+                color = if (account.balance >= 0) AppTheme.Colors.green else AppTheme.Colors.red
+            )
         )
     }
 }
@@ -493,12 +587,15 @@ private fun BalanceCardTitle(
     Column(modifier = modifier) {
         BasicText(
             text = title,
+            maxLines = BALANCE_CARD_TITLE_MAX_LINE,
+            overflow = TextOverflow.Ellipsis,
             style = AppTheme.TextStyles.title.copy(AppTheme.Colors.black)
         )
 
         Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen2))
 
         BasicText(
+            maxLines = BALANCE_CARD_TITLE_MAX_LINE,
             text = sum,
             style = AppTheme.TextStyles.headlineTitle.copy(color = color)
         )
@@ -506,99 +603,131 @@ private fun BalanceCardTitle(
 }
 
 @Composable
-private fun CategoriesPie(modifier: Modifier = Modifier) {
+private fun CategorySharesChart(
+    modifier: Modifier = Modifier,
+    categoryShares: List<CategoryShare>,
+) {
+    Box(
+        modifier = modifier
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            var startAngle = 0f
+
+            categoryShares.forEach {
+                val sweepAngle = it.percent.mapValueToDifferentRange(
+                    inMin = 0f,
+                    inMax = 100f,
+                    outMin = 0f,
+                    outMax = 360f
+                )
+
+                drawArc(
+                    color = Color(it.color),
+                    startAngle = startAngle,
+                    sweepAngle = sweepAngle
+                )
+
+                startAngle += sweepAngle
+            }
+        }
+    }
 }
+
+private fun DrawScope.drawArc(
+    color: Color,
+    startAngle: Float,
+    sweepAngle: Float,
+) {
+    val padding = 48.dp.toPx() // some padding to avoid arc touching the border
+    val sizeMin = min(size.width, size.height)
+    drawArc(
+        color = color,
+        startAngle = startAngle,
+        sweepAngle = sweepAngle,
+        useCenter = false, // draw arc without infill
+        size = Size(sizeMin - padding, sizeMin - padding), // size of the arc/circle in pixels
+        style = Stroke( // width of the ark
+            width = sizeMin / 10
+        ),
+        topLeft = Offset(padding / 2f, padding / 2f) // move the arc to center
+    )
+}
+
+fun Float.mapValueToDifferentRange(
+    inMin: Float,
+    inMax: Float,
+    outMin: Float,
+    outMax: Float,
+) = (this - inMax) * (outMax - outMin) / (inMax - inMin) + outMin
 
 @Composable
 private fun TransactionsList(
     modifier: Modifier = Modifier,
     transactions: List<Transaction>,
-    itemsToShow: Int,
 ) {
     LazyColumn(modifier = modifier) {
-        items(transactions.take(itemsToShow)) {
-            TransactionItem(
-                icon = AppIcons.PlusIcon.painter,
-                title = it.name,
-                amount = it.amount,
-                type = it.type,
-                account = it.account.name,
-                currency = it.account.currency,
-                category = it.category.name
-            )
+        items(transactions) {
+            TransactionView(transaction = it)
         }
     }
 }
 
 @Composable
-private fun TransactionDialog(
-    onDismissRequest: () -> Unit,
-    state: MainState,
-    obtainViewAction: (MainViewAction) -> Unit,
-) {
-    Dialog(
-        onDismissRequest = onDismissRequest,
-    ) {
-        Column(
-            modifier = Modifier.padding(AppTheme.Dimens.dimen16).sizeIn(280.dp, 100.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            AppTextField(
-                value = state.newTransactionTitle,
-                onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
-                hint = stringResource(Res.string.main_screen_title)
+private fun TransactionView(modifier: Modifier = Modifier, transaction: Transaction) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            painter = AppIcons.Transactions.painter,
+            contentDescription = AppIcons.Transactions.contentDescription
+        )
+
+        Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen8))
+
+        Column(modifier = Modifier) {
+            BasicText(
+                text = transaction.name,
+                style = AppTheme.TextStyles.subtitle.copy(color = AppTheme.Colors.black),
             )
 
-            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
+            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen4))
 
-            AppTextField(
-                value = state.newTransactionType?.name ?: "",
-                onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
-                hint = stringResource(Res.string.main_screen_title)
-            )
-
-            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
-
-            Row(modifier = Modifier.fillMaxWidth()) {
-                AppTextField(
-                    value = state.newTransactionSumma.toString(),
-                    onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
-                    hint = stringResource(Res.string.main_screen_title)
+            Row(modifier = Modifier, horizontalArrangement = Arrangement.End) {
+                BasicText(
+                    text = transaction.category.name,
+                    style = AppTheme.TextStyles.body.copy(
+                        color = AppTheme.Colors.gray,
+                        textAlign = TextAlign.End
+                    ),
                 )
 
-                // DropDown
+                Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen4))
+
+                BasicText(
+                    text = transaction.account.name,
+                    style = AppTheme.TextStyles.body.copy(color = AppTheme.Colors.gray)
+                )
             }
+        }
 
-            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
+        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen16))
 
-            AppTextField(
-                value = state.newTransactionType?.name ?: "",
-                onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
-                hint = stringResource(Res.string.main_screen_title)
+        Column(modifier = Modifier) {
+            BasicText(
+                text = stringResource(Res.string.main_screen_ruble_example, transaction.amount),
+                style = AppTheme.TextStyles.subtitle.copy(
+                    color = if (transaction.type == TransactionType.INCOME) {
+                        AppTheme.Colors.green
+                    } else {
+                        AppTheme.Colors.red
+                    }
+                )
             )
 
-            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
+            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen4))
 
-            AppTextField(
-                value = state.newTransactionTitle,
-                onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
-                hint = stringResource(Res.string.main_screen_title)
-            )
-
-            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
-
-            AppTextField(
-                value = state.newTransactionTitle,
-                onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
-                hint = stringResource(Res.string.main_screen_title)
-            )
-
-            Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen10))
-
-            AppTextField(
-                value = state.newTransactionTitle,
-                onValueChange = { obtainViewAction(MainViewAction.UpdateNewTransactionTitle(it)) },
-                hint = stringResource(Res.string.main_screen_title)
+            BasicText(
+                text = transaction.date.toInput(),
+                style = AppTheme.TextStyles.body.copy(color = AppTheme.Colors.gray)
             )
         }
     }

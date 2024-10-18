@@ -3,6 +3,7 @@ package ru.crazerr.cashtracker.feature.transaction.presentation.api.createTransa
 import kotlinx.datetime.LocalDate
 import ru.crazerr.cashtracker.core.utils.dateTime.now
 import ru.crazerr.cashtracker.core.utils.model.TransactionType
+import ru.crazerr.cashtracker.currency.domain.api.model.Currency
 import ru.crazerr.cashtracker.feature.account.domain.api.model.Account
 import ru.crazerr.cashtracker.feature.category.domain.api.model.Category
 
@@ -35,6 +36,8 @@ internal val InitialCreateTransactionState = CreateTransactionState(
     selectedCategory = Category(
         id = 0,
         name = "",
+        iconId = "",
+        color = 0,
     ),
     categories = emptyList(),
     accountsIsExpand = false,
@@ -42,7 +45,13 @@ internal val InitialCreateTransactionState = CreateTransactionState(
         id = 0,
         name = "",
         balance = 0f,
-        currency = "",
+        currency = Currency(
+            id = 0,
+            name = "",
+            code = "",
+            symbolNative = "",
+            symbol = ""
+        ),
     ),
     accounts = emptyList(),
     description = null,

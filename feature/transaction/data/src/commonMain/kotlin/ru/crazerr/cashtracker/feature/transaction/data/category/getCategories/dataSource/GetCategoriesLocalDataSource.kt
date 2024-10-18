@@ -22,6 +22,8 @@ internal fun List<CategoryEntity>.toCategories() =
     map {
         Category(
             id = it.id,
-            name = it.name
+            name = it.name,
+            iconId = it.iconId,
+            color = it.color
         )
     }

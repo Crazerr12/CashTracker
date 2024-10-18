@@ -7,10 +7,14 @@ import ru.crazerr.cashtracker.feature.category.data.addCategory.model.toCategory
 internal class AddCategoryLocalDataSource(
     private val categoryDao: CategoryDao,
 ) {
-    suspend fun addCategory(name: String): Result<Long> {
+    suspend fun addCategory(name: String, color: Int, iconId: String): Result<Long> {
         return try {
             val id = categoryDao.insert(
-                categoryEntity = AddCategoryRequestBody(name = name).toCategoryEntity()
+                categoryEntity = AddCategoryRequestBody(
+                    name = name,
+                    color = color,
+                    iconId = iconId,
+                ).toCategoryEntity()
             )
             Result.success(id)
         } catch (ex: Exception) {

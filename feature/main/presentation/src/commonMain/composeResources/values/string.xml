@@ -21,24 +21,6 @@
     <string name="main_screen_transactions_card_tab_recently">Последние</string>
     <string name="main_screen_transactions_card_title">Транзакции</string>
 
-    <!--add new transaction dialog-->
-    <string name="add_new_transaction_dialog_button_cancel">Отмена</string>
-    <string name="add_new_transaction_dialog_button_clear">Очистить</string>
-    <string name="add_new_transaction_dialog_button_save">Сохранить</string>
-
-    <string name="add_new_transaction_dialog_checkbox_add_to_goal">Добавить в цель?</string>
-    <string name="add_new_transaction_dialog_checkbox_make_regular">Сделать транзацию регулярной?</string>
-
-    <string name="add_new_transaction_dialog_radio_button_every_day">Ежедневно</string>
-    <string name="add_new_transaction_dialog_radio_button_every_month">Ежемесячно</string>
-    <string name="add_new_transaction_dialog_radio_button_every_week">Еженедельно</string>
-
-    <string name="add_new_transaction_dialog_text_field_account_hint">Счёт</string>
-    <string name="add_new_transaction_dialog_text_field_category_hint">Категория</string>
-    <string name="add_new_transaction_dialog_text_field_date_hint">Дата</string>
-    <string name="add_new_transaction_dialog_text_field_description_hint">Описание</string>
-    <string name="add_new_transaction_dialog_text_field_goal_hint">Цель</string>
-    <string name="add_new_transaction_dialog_text_field_summa_hint">Сумма</string>
-    <string name="add_new_transaction_dialog_text_field_title_hint">Название</string>
-    <string name="add_new_transaction_dialog_text_field_type_hint">Тип транзакции</string>
+    <string name="main_screen_ruble_example">%1$d &#8381;</string>
+    <string name="main_screen_percent_example">%1$d%</string>
 </resources>

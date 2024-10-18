@@ -6,7 +6,7 @@ import ru.crazerr.cashtracker.feature.category.domain.repository.CategoryReposit
 internal class CategoryRepositoryImpl(
     private val addCategoryLocalDataSource: AddCategoryLocalDataSource,
 ) : CategoryRepository {
-    override suspend fun addCategory(name: String): Result<Long> {
-        return addCategoryLocalDataSource.addCategory(name = name)
+    override suspend fun addCategory(name: String, color: Int, iconId: String): Result<Long> {
+        return addCategoryLocalDataSource.addCategory(name = name, color = color, iconId = iconId)
     }
 }

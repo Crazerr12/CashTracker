@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -26,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.VisualTransformation
 import cashtracker.feature.transaction.presentation.generated.resources.Res
 import cashtracker.feature.transaction.presentation.generated.resources.create_transaction_dialog_account_hint
 import cashtracker.feature.transaction.presentation.generated.resources.create_transaction_dialog_amount_hint
@@ -47,6 +47,7 @@ import ru.crazerr.cashtracker.core.compose.theme.AppTheme
 import ru.crazerr.cashtracker.core.utils.dateTime.toEpochMilliSeconds
 import ru.crazerr.cashtracker.core.utils.dateTime.toLocalDate
 import ru.crazerr.cashtracker.core.utils.model.TransactionType
+import ru.crazerr.cashtracker.core.utils.visualTransformation.CurrencySeparatorVisualTransformation
 import ru.crazerr.cashtracker.feature.account.domain.api.model.Account
 import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountViewFactory
 import ru.crazerr.cashtracker.feature.category.domain.api.model.Category
@@ -131,6 +132,11 @@ private fun CreateTransactionViewContent(
         AppTextField(
             value = state.amount,
             error = state.amountError,
+            visualTransformation = if (state.amount.isEmpty()) {
+                VisualTransformation.None
+            } else {
+                CurrencySeparatorVisualTransformation(state.selectedAccount.currency.symbolNative)
+            },
             onValueChange = { obtainViewAction(CreateTransactionViewAction.AmountChange(it)) },
             hint = stringResource(Res.string.create_transaction_dialog_amount_hint)
         )
@@ -322,7 +328,6 @@ private fun DateRow(
             hint = stringResource(Res.string.create_transaction_dialog_date_hint),
             trailingIcon = {
                 AppIconButton(
-                    modifier = Modifier.size(AppTheme.Dimens.dimen20),
                     iconTint = AppTheme.Colors.black,
                     icon = AppIcons.Calendar.painter,
                     contentDescription = AppIcons.Calendar.contentDescription,

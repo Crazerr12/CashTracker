@@ -5,12 +5,14 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -19,6 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import cashtracker.feature.account.presentation.generated.resources.Res
 import cashtracker.feature.account.presentation.generated.resources.create_account_dialog_balance_hint
@@ -32,6 +37,7 @@ import ru.crazerr.cashtracker.core.compose.components.AppTextField
 import ru.crazerr.cashtracker.core.compose.components.ButtonsFooter
 import ru.crazerr.cashtracker.core.compose.icons.AppIcons
 import ru.crazerr.cashtracker.core.compose.theme.AppTheme
+import ru.crazerr.cashtracker.core.utils.visualTransformation.CurrencySeparatorVisualTransformation
 import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountComponent
 import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountState
 import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountViewAction
@@ -98,12 +104,21 @@ private fun CurrencyRow(
     state: CreateAccountState,
     obtainViewAction: (CreateAccountViewAction) -> Unit,
 ) {
-    Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = modifier.fillMaxWidth()
+            .height(IntrinsicSize.Max),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Box(modifier = Modifier.weight(1f)) {
             AppTextField(
                 modifier = Modifier,
                 value = state.balance,
                 onValueChange = { obtainViewAction(CreateAccountViewAction.UpdateCurrentAmount(it)) },
+                visualTransformation = if (state.balance.isEmpty()) {
+                    VisualTransformation.None
+                } else {
+                    CurrencySeparatorVisualTransformation(state.selectedCurrency.symbolNative)
+                },
                 error = state.balanceError,
                 hint = stringResource(Res.string.create_account_dialog_balance_hint),
             )
@@ -111,51 +126,93 @@ private fun CurrencyRow(
 
         Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen8))
 
-        Box(
-            modifier = Modifier.clickable {
-                obtainViewAction(CreateAccountViewAction.ManageCurrencyMenu)
-            }.border(
+        CurrencySelector(state = state, obtainViewAction = obtainViewAction)
+    }
+}
+
+@Composable
+private fun CurrencySelector(
+    modifier: Modifier = Modifier,
+    state: CreateAccountState,
+    obtainViewAction: (CreateAccountViewAction) -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .clip(shape = RoundedCornerShape(AppTheme.Dimens.dimen8))
+            .border(
                 border = BorderStroke(
                     width = 1.dp,
                     color = AppTheme.Colors.black
-                )
+                ),
+                shape = RoundedCornerShape(AppTheme.Dimens.dimen8)
+            )
+            .clickable {
+                obtainViewAction(CreateAccountViewAction.ManageCurrencyMenu)
+            }
+            .padding(
+                start = AppTheme.Dimens.dimen8,
+                top = AppTheme.Dimens.dimen8,
+                bottom = AppTheme.Dimens.dimen8,
+                end = AppTheme.Dimens.dimen4
             ),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            modifier = Modifier.padding(start = AppTheme.Dimens.dimen4),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.padding(start = AppTheme.Dimens.dimen4),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                BasicText(
-                    text = state.currency.ifEmpty { "RUB" },
-                    style = AppTheme.TextStyles.body,
-                )
+            BasicText(
+                text = state.selectedCurrency.code,
+                style = AppTheme.TextStyles.body,
+            )
 
-                Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen4))
+            Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen4))
 
-                Icon(
-                    tint = AppTheme.Colors.black,
-                    painter = if (state.isExpanded) AppIcons.AngleUp.painter else AppIcons.AngleDown.painter,
-                    contentDescription = if (state.isExpanded) {
-                        AppIcons.AngleUp.contentDescription
-                    } else {
-                        AppIcons.AngleDown.contentDescription
-                    },
-                )
-            }
-
-            DropdownMenu(
-                expanded = state.isExpanded,
-                onDismissRequest = {
-                    obtainViewAction(
-                        CreateAccountViewAction.ManageCurrencyMenu
-                    )
+            Icon(
+                tint = AppTheme.Colors.black,
+                painter = if (state.isExpanded) AppIcons.AngleUp.painter else AppIcons.AngleDown.painter,
+                contentDescription = if (state.isExpanded) {
+                    AppIcons.AngleUp.contentDescription
+                } else {
+                    AppIcons.AngleDown.contentDescription
                 },
-            ) {
-                DropdownMenuItem(
-                    text = { BasicText(text = "RUB", style = AppTheme.TextStyles.body) },
-                    onClick = { obtainViewAction(CreateAccountViewAction.UpdateCurrency(currency = "RUB")) }
-                )
-            }
+            )
+        }
+
+        CurrencyDropdown(state = state, obtainViewAction = obtainViewAction)
+    }
+}
+
+@Composable
+private fun CurrencyDropdown(
+    modifier: Modifier = Modifier,
+    state: CreateAccountState,
+    obtainViewAction: (CreateAccountViewAction) -> Unit,
+) {
+    DropdownMenu(
+        modifier = modifier,
+        offset = DpOffset(x = (-140).dp, y = 12.dp),
+        expanded = state.isExpanded,
+        onDismissRequest = {
+            obtainViewAction(
+                CreateAccountViewAction.ManageCurrencyMenu
+            )
+        },
+    ) {
+        state.currencies.forEach {
+            DropdownMenuItem(
+                text = {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        BasicText(text = it.name, style = AppTheme.TextStyles.body)
+
+                        Spacer(modifier = Modifier.weight(1f))
+                        Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen16))
+
+                        BasicText(text = it.code, style = AppTheme.TextStyles.body)
+                    }
+                },
+                onClick = { obtainViewAction(CreateAccountViewAction.UpdateCurrency(currency = it)) }
+            )
         }
     }
 }

@@ -7,6 +7,9 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import ru.crazerr.cashtracker.core.database.transaction.model.CategoryShareDbo
+import ru.crazerr.cashtracker.core.database.transaction.model.ExpensesAndIncomeDbo
+import ru.crazerr.cashtracker.core.database.transaction.model.TransactionWithCategoryAndAccountDbo
 
 @Dao
 interface TransactionDao {
@@ -20,17 +23,79 @@ interface TransactionDao {
     @Query(
         """
         SELECT t.id AS transaction_id, t.name, t.amount, t.type, t.date, t.description,
-            c.id AS category_id, c.name AS category_name,
-            a.id AS account_id, a.name AS account_name, a.balance AS account_balance, a.currency AS account_currency
+            c.id AS category_id, c.name AS category_name, c.icon_id AS category_icon_id, c.color AS category_color,
+            a.id AS account_id, a.name AS account_name, a.balance AS account_balance,
+            cur.id AS account_currency_id, cur.code AS account_currency_code, cur.name AS account_currency_name, cur.symbol AS account_currency_symbol, cur.symbol_native AS account_currency_symbol_native    
         FROM transactions t
         INNER JOIN categories c ON t.category_id = c.id
         INNER JOIN accounts a ON t.account_id = a.id
+        INNER JOIN currencies cur ON a.currency_id = cur.id
     """
     )
-    fun getAll(): Flow<List<TransactionWithCategoryAndAccount>>
+    fun getAll(): Flow<List<TransactionWithCategoryAndAccountDbo>>
 
-    @Query("SELECT * FROM transactions")
-    fun getByMonth(): Flow<List<TransactionEntity>>
+    @Transaction
+    @Query(
+        """
+        SELECT t.id AS transaction_id, t.name, t.amount, t.type, t.date, t.description,
+            c.id AS category_id, c.name AS category_name, c.icon_id AS category_icon_id, c.color AS category_color,
+            a.id AS account_id, a.name AS account_name, a.balance AS account_balance,
+            cur.id AS account_currency_id, cur.code AS account_currency_code, cur.name AS account_currency_name, cur.symbol AS account_currency_symbol, cur.symbol_native AS account_currency_symbol_native 
+        FROM transactions t
+        INNER JOIN categories c ON t.category_id = c.id
+        INNER JOIN accounts a ON t.account_id = a.id
+        INNER JOIN currencies cur ON a.currency_id = cur.id
+        WHERE strftime('%Y-%m', t.date) = :date
+        ORDER BY t.date DESC
+        LIMIT :limit ;
+    """
+    )
+    fun getByMonthWithLimit(
+        date: String,
+        limit: Int = 10,
+    ): Flow<List<TransactionWithCategoryAndAccountDbo>>
+
+    @Transaction
+    @Query(
+        """
+        SELECT t.id AS transaction_id, t.name, t.amount, t.type, t.date, t.description,
+            c.id AS category_id, c.name AS category_name, c.icon_id AS category_icon_id, c.color AS category_color,
+            a.id AS account_id, a.name AS account_name, a.balance AS account_balance, 
+            cur.id AS account_currency_id, cur.code AS account_currency_code, cur.name AS account_currency_name, cur.symbol AS account_currency_symbol, cur.symbol_native AS account_currency_symbol_native  
+        FROM transactions t
+        INNER JOIN categories c ON t.category_id = c.id
+        INNER JOIN accounts a ON t.account_id = a.id
+        INNER JOIN currencies cur ON cur.id = a.currency_id
+        WHERE strftime('%Y-%m', t.date) = :date
+        ORDER BY t.date DESC
+    """
+    )
+    fun getByMonth(date: String): Flow<List<TransactionWithCategoryAndAccountDbo>>
+
+    @Transaction
+    @Query(
+        """
+        SELECT SUM(t.amount) AS category_sum, c.id AS category_id, c.name AS category_name, c.icon_id AS category_icon_id, c.color AS category_color
+        FROM transactions t
+        INNER JOIN categories c ON t.category_id = c.id
+        WHERE strftime('%Y-%m', t.date) = :date 
+        GROUP BY t.category_id
+        HAVING category_sum > 0
+    """
+    )
+    fun getCategoryShares(date: String): Flow<List<CategoryShareDbo>>
+
+    @Transaction
+    @Query(
+        """
+        SELECT 
+            SUM(CASE WHEN type = "INCOME" THEN amount ELSE 0 END) AS total_income,
+            SUM(CASE WHEN type = "EXPENSE" THEN amount ELSE 0 END) AS total_expenses
+        FROM transactions
+        WHERE strftime('%Y-%m', date) = :date 
+    """
+    )
+    fun getExpensesAndIncomeByMonth(date: String): Flow<ExpensesAndIncomeDbo>
 
     @Update
     suspend fun update(vararg transactionEntity: TransactionEntity)
