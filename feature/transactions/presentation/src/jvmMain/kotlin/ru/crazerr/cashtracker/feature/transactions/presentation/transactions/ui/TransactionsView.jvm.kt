@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -120,28 +119,38 @@ private fun TransactionsViewContent(
 @Composable
 private fun FilterRow(modifier: Modifier = Modifier) {
     Row(modifier = modifier.fillMaxWidth()) {
-        FilterItem { }
+        FilterItem(text = "", onClick = {}, isExpand = false)
         Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen8))
-        FilterItem { }
+        FilterItem(text = "", onClick = {}, isExpand = false)
         Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen8))
-        FilterItem { }
+        FilterItem(text = "", onClick = {}, isExpand = false)
     }
 }
 
 @Composable
-private fun FilterItem(onClick: () -> Unit) {
-    Box {
-        Row(
-            modifier = Modifier
-                .clickable { onClick() }
-                .clip(RoundedCornerShape(AppTheme.Dimens.dimen16))
-                .border(
-                    border = BorderStroke(width = 1.dp, color = AppTheme.Colors.black),
-                    shape = RoundedCornerShape(AppTheme.Dimens.dimen16)
-                ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-        }
+private fun FilterItem(text: String, onClick: () -> Unit, isExpand: Boolean) {
+    Row(
+        modifier = Modifier
+            .padding(AppTheme.Dimens.dimen4)
+            .clickable { onClick() }
+            .clip(RoundedCornerShape(AppTheme.Dimens.dimen16))
+            .border(
+                border = BorderStroke(width = 1.dp, color = AppTheme.Colors.black),
+                shape = RoundedCornerShape(AppTheme.Dimens.dimen16)
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        BasicText(
+            text = text,
+            style = AppTheme.TextStyles.body.copy(color = AppTheme.Colors.black)
+        )
+
+        Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen8))
+
+        Icon(
+            painter = if (isExpand) AppIcons.AngleUp.painter else AppIcons.AngleDown.painter,
+            contentDescription = if (isExpand) AppIcons.AngleUp.contentDescription else AppIcons.AngleDown.contentDescription
+        )
     }
 }
 
@@ -151,7 +160,7 @@ private fun TabsWithSearchRow(
     state: TransactionsState,
     obtainViewAction: (TransactionsViewAction) -> Unit,
 ) {
-    Row(modifier = modifier.fillMaxWidth()) {
+    Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         TransactionsTab.entries.forEach { tab ->
             AppButton(
                 text = tab.name,
@@ -168,6 +177,7 @@ private fun TabsWithSearchRow(
         Spacer(modifier = Modifier.weight(1f))
 
         AppTextField(
+            modifier = Modifier.weight(1f),
             value = state.searchQuery,
             onValueChange = {},
             hint = stringResource(Res.string.transactions_screen_search_bar_hint),

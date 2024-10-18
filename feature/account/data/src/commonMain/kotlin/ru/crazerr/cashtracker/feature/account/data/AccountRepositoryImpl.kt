@@ -1,6 +1,6 @@
 package ru.crazerr.cashtracker.feature.account.data
 
-import ru.crazerr.cashtracker.feature.account.data.accountDialog.dataSource.AddAccountLocalDataSource
+import ru.crazerr.cashtracker.feature.account.data.accountDialog.addAccount.dataSource.AddAccountLocalDataSource
 import ru.crazerr.cashtracker.feature.account.domain.repository.AccountRepository
 
 internal class AccountRepositoryImpl(
@@ -9,12 +9,12 @@ internal class AccountRepositoryImpl(
     override suspend fun addAccount(
         name: String,
         balance: Float,
-        currency: String,
+        currencyId: Long,
     ): Result<Long> {
         return addAccountLocalDataSource.addAccount(
             name = name,
             balance = balance,
-            currency = currency
+            currencyId = currencyId
         )
     }
 }

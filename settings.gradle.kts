@@ -55,6 +55,8 @@ include(":feature:cashback:data")
 include(":feature:cashback:domain")
 include(":feature:cashback:presentation")
 
+include(":feature:currency:domain:api")
+
 include("feature:transaction:data")
 include("feature:transaction:domain")
 include("feature:transaction:domain:api")

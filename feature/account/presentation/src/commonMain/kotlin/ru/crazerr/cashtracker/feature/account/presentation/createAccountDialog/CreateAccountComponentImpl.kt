@@ -3,11 +3,13 @@ package ru.crazerr.cashtracker.feature.account.presentation.createAccountDialog
 import com.arkivanov.decompose.ComponentContext
 import kotlinx.coroutines.launch
 import ru.crazerr.cashtracker.core.utils.coroutine.componentCoroutineScope
+import ru.crazerr.cashtracker.currency.domain.api.model.Currency
 import ru.crazerr.cashtracker.feature.account.domain.usecase.addAccount.AddAccountUseCase
 import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountComponent
 import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountComponentAction
 import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountViewAction
 import ru.crazerr.cashtracker.feature.account.presentation.createAccountDialog.handler.AddAccountResultHandler
+import ru.crazerr.cashtracker.feature.account.presentation.createAccountDialog.handler.GetCurrenciesResultHandler
 
 internal class CreateAccountComponentImpl(
     componentContext: ComponentContext,
@@ -18,7 +20,14 @@ internal class CreateAccountComponentImpl(
     private val coroutineScope = componentCoroutineScope()
 
     init {
-        // TODO (Загружать список валют)
+        coroutineScope.launch {
+            val result = dependencies.getCurrenciesUseCase.execute(Unit)
+
+            GetCurrenciesResultHandler(
+                result = result,
+                delegate = this@CreateAccountComponentImpl
+            ).handle()
+        }
     }
 
     override fun obtainViewAction(action: CreateAccountViewAction) {
@@ -39,7 +48,7 @@ internal class CreateAccountComponentImpl(
 
     private fun onUpdateCurrentAmount(amount: String) {
         reduceState {
-            if (amount.last().isDigit()) {
+            if (amount.lastOrNull()?.isDigit() == true || amount.isEmpty()) {
                 copy(balance = amount, balanceError = null)
             } else {
                 copy(balanceError = "Поле принимает только цифры")
@@ -47,8 +56,8 @@ internal class CreateAccountComponentImpl(
         }
     }
 
-    private fun onUpdateCurrency(currency: String) {
-        reduceState { copy(currency = currency, isExpanded = false) }
+    private fun onUpdateCurrency(currency: Currency) {
+        reduceState { copy(selectedCurrency = currency, isExpanded = false) }
     }
 
     private fun onUpdateDescription(description: String) {
@@ -67,7 +76,7 @@ internal class CreateAccountComponentImpl(
                     params = AddAccountUseCase.Params(
                         name = state.value.name,
                         balance = state.value.balance.toFloat(),
-                        currency = state.value.currency,
+                        currencyId = state.value.selectedCurrency.id,
                     )
                 )
 

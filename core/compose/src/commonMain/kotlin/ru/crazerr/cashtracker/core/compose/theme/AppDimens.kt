@@ -9,6 +9,7 @@ data class AppDimens(
     val dimen8: Dp,
     val dimen10: Dp,
     val dimen12: Dp,
+    val dimen14: Dp,
     val dimen16: Dp,
     val dimen20: Dp,
     val dimen24: Dp,
@@ -17,6 +18,7 @@ data class AppDimens(
     val dimen32: Dp,
     val dimen36: Dp,
     val dimen100: Dp,
+    val dimen200: Dp,
 )
 
 internal val defaultDimens = AppDimens(
@@ -25,6 +27,7 @@ internal val defaultDimens = AppDimens(
     dimen8 = 8.dp,
     dimen10 = 10.dp,
     dimen12 = 12.dp,
+    dimen14 = 14.dp,
     dimen16 = 16.dp,
     dimen20 = 20.dp,
     dimen24 = 24.dp,
@@ -33,4 +36,5 @@ internal val defaultDimens = AppDimens(
     dimen32 = 32.dp,
     dimen36 = 36.dp,
     dimen100 = 100.dp,
+    dimen200 = 200.dp
 )

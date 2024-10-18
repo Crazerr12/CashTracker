@@ -15,7 +15,8 @@ val accountPresentationModule = module {
 
     factory<CreateAccountComponentFactory> {
         CreateAccountComponentFactoryImpl(
-            addAccountUseCase = get()
+            addAccountUseCase = get(),
+            getCurrenciesUseCase = get(),
         )
     }
 

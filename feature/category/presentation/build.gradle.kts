@@ -9,6 +9,7 @@ commonMainDependencies {
     implementation(project(":feature:category:domain"))
     implementation(project(":feature:category:presentation:api"))
 
+    implementation(libs.compose.colorpicker)
     implementation(libs.kotlinx.datetime)
 }
 

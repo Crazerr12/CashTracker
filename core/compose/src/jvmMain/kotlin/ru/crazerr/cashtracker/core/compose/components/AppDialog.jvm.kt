@@ -31,7 +31,7 @@ actual fun AppDialog(
     ) {
         Column(
             modifier = modifier
-                .heightIn(min = 400.dp, max = 700.dp)
+                .heightIn(max = 700.dp)
                 .clip(shape = RoundedCornerShape(AppTheme.Dimens.dimen20))
                 .background(
                     color = AppTheme.Colors.background,
@@ -43,7 +43,7 @@ actual fun AppDialog(
 
             Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen12))
 
-            content(Modifier.weight(1f))
+            content(Modifier.weight(1f, fill = false))
 
             Spacer(modifier = Modifier.height(AppTheme.Dimens.dimen12))
 

@@ -21,7 +21,7 @@ fun main() {
     }
 
     application {
-        val windowState = rememberWindowState(width = 800.dp, height = 600.dp)
+        val windowState = rememberWindowState(width = 1280.dp, height = 720.dp)
 
         LifecycleController(lifecycle, windowState)
 
@@ -38,5 +38,5 @@ fun main() {
     }
 }
 
-private const val DefaultMinWidth = 800
+private const val DefaultMinWidth = 960
 private const val DefaultMinHeight = 600

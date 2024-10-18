@@ -16,10 +16,11 @@ val mainPresentationModule = module {
         MainComponentFactoryImpl(
             getAccountsUseCase = get(),
             getTransactionsUseCase = get(),
-            createCategoryComponentFactory = get(),
+            getCategorySharesUseCase = get(),
             createAccountComponentFactory = get(),
-            createTransactionComponentFactory = get()
+            createTransactionComponentFactory = get(),
+            getExpensesAndIncomeByMonthUseCase = get(),
         )
     }
-    includes(mainDomainModule, mainDataModule,)
+    includes(mainDomainModule, mainDataModule)
 }

@@ -1,9 +1,12 @@
 package ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog
 
+import ru.crazerr.cashtracker.currency.domain.api.model.Currency
+
 data class CreateAccountState(
     val name: String,
     val balance: String,
-    val currency: String,
+    val selectedCurrency: Currency,
+    val currencies: List<Currency>,
     val description: String,
     val symbol: String,
     val balanceError: String?,
@@ -14,7 +17,14 @@ data class CreateAccountState(
 internal val InitialCreateAccountState = CreateAccountState(
     name = "",
     balance = "",
-    currency = "RUB",
+    selectedCurrency = Currency(
+        id = 0,
+        name = "",
+        code = "",
+        symbol = "",
+        symbolNative = "",
+    ),
+    currencies = emptyList(),
     description = "",
     symbol = "",
     balanceError = null,

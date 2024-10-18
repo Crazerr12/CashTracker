@@ -2,7 +2,8 @@ package ru.crazerr.cashtracker.feature.transaction.data.account.getAccounts.data
 
 import kotlinx.coroutines.flow.first
 import ru.crazerr.cashtracker.core.database.account.AccountDao
-import ru.crazerr.cashtracker.core.database.account.AccountEntity
+import ru.crazerr.cashtracker.core.database.account.model.AccountWithCurrency
+import ru.crazerr.cashtracker.currency.domain.api.model.Currency
 import ru.crazerr.cashtracker.feature.account.domain.api.model.Account
 
 internal class GetAccountsLocalDataSource(
@@ -18,12 +19,18 @@ internal class GetAccountsLocalDataSource(
     }
 }
 
-internal fun List<AccountEntity>.toAccounts() =
-    map {
+internal fun List<AccountWithCurrency>.toAccounts() =
+    map { accountWithCurrency ->
         Account(
-            id = it.id,
-            name = it.name,
-            balance = it.balance,
-            currency = it.currency
+            id = accountWithCurrency.id,
+            name = accountWithCurrency.name,
+            balance = accountWithCurrency.balance,
+            currency = Currency(
+                id = accountWithCurrency.currency.id,
+                name = accountWithCurrency.currency.name,
+                code = accountWithCurrency.currency.code,
+                symbol = accountWithCurrency.currency.symbol,
+                symbolNative = accountWithCurrency.currency.symbolNative
+            )
         )
     }

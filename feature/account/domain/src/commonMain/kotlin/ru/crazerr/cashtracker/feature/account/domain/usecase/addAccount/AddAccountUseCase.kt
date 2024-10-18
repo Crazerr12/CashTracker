@@ -7,7 +7,7 @@ import ru.crazerr.cashtracker.feature.account.domain.repository.AccountRepositor
 interface AddAccountUseCase : UseCase<AddAccountUseCase.Params, AddAccountResult> {
     data class Params(
         val name: String,
-        val currency: String,
+        val currencyId: Long,
         val balance: Float,
     )
 }
@@ -19,7 +19,7 @@ internal class AddAccountUseCaseImpl(
         val result = accountRepository.addAccount(
             name = params.name,
             balance = params.balance,
-            currency = params.currency
+            currencyId = params.currencyId
         )
 
         return result.fold(

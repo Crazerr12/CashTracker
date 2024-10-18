@@ -3,8 +3,9 @@ package ru.crazerr.cashtracker.feature.main.presentation.main
 import com.arkivanov.decompose.ComponentContext
 import ru.crazerr.cashtracker.core.utils.presentation.ComponentFactory
 import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountComponentFactory
-import ru.crazerr.cashtracker.feature.category.presentation.api.createCategoryDialog.CreateCategoryComponentFactory
 import ru.crazerr.cashtracker.feature.main.domain.usecase.getAccounts.GetAccountsUseCase
+import ru.crazerr.cashtracker.feature.main.domain.usecase.getCategoryShares.GetCategorySharesUseCase
+import ru.crazerr.cashtracker.feature.main.domain.usecase.getExpensesAndIncomeByMonth.GetExpensesAndIncomeByMonthUseCase
 import ru.crazerr.cashtracker.feature.main.domain.usecase.getTransactions.GetTransactionsUseCase
 import ru.crazerr.cashtracker.feature.transaction.presentation.api.createTransactionDialog.CreateTransactionComponentFactory
 
@@ -13,9 +14,10 @@ interface MainComponentFactory : ComponentFactory<MainComponent, MainComponentAc
 class MainComponentFactoryImpl(
     private val getAccountsUseCase: GetAccountsUseCase,
     private val getTransactionsUseCase: GetTransactionsUseCase,
+    private val getCategorySharesUseCase: GetCategorySharesUseCase,
     private val createTransactionComponentFactory: CreateTransactionComponentFactory,
     private val createAccountComponentFactory: CreateAccountComponentFactory,
-    private val createCategoryComponentFactory: CreateCategoryComponentFactory,
+    private val getExpensesAndIncomeByMonthUseCase: GetExpensesAndIncomeByMonthUseCase,
 ) : MainComponentFactory {
     override fun create(
         componentContext: ComponentContext,
@@ -27,9 +29,10 @@ class MainComponentFactoryImpl(
             dependencies = MainDependencies(
                 getTransactionsUseCase = getTransactionsUseCase,
                 getAccountsUseCase = getAccountsUseCase,
+                getCategorySharesUseCase = getCategorySharesUseCase,
                 createTransactionComponentFactory = createTransactionComponentFactory,
-                createCategoryComponentFactory = createCategoryComponentFactory,
                 createAccountComponentFactory = createAccountComponentFactory,
+                getExpensesAndIncomeByMonthUseCase = getExpensesAndIncomeByMonthUseCase
             )
         )
     }

@@ -7,7 +7,7 @@ import ru.crazerr.cashtracker.feature.main.data.categories.CategoryRepositoryImp
 import ru.crazerr.cashtracker.feature.main.data.transactions.TransactionsRepositoryImpl
 import ru.crazerr.cashtracker.feature.main.data.transactions.dataSource.AccountsDataSource
 import ru.crazerr.cashtracker.feature.main.data.transactions.dataSource.CategoriesDataSource
-import ru.crazerr.cashtracker.feature.main.data.transactions.dataSource.TransactionsDataSource
+import ru.crazerr.cashtracker.feature.main.data.transactions.dataSource.TransactionsLocalDataSource
 import ru.crazerr.cashtracker.feature.main.domain.repository.AccountsRepository
 import ru.crazerr.cashtracker.feature.main.domain.repository.CategoryRepository
 import ru.crazerr.cashtracker.feature.main.domain.repository.TransactionsRepository
@@ -29,9 +29,7 @@ val mainDataModule = module {
     }
     single<TransactionsRepository> {
         TransactionsRepositoryImpl(
-            transactionsDataSource = TransactionsDataSource(get<AppDatabase>().transactionDao()),
-            accountsDataSource = AccountsDataSource(get<AppDatabase>().accountDao()),
-            categoriesDataSource = CategoriesDataSource(get<AppDatabase>().categoryDao())
+            transactionsLocalDataSource = TransactionsLocalDataSource(get<AppDatabase>().transactionDao()),
         )
     }
 }

@@ -15,6 +15,6 @@ expect fun AppIconButton(
     icon: Painter,
     onClick: () -> Unit,
     contentDescription: String? = null,
-    iconTint: Color = AppTheme.Colors.white,
+    iconTint: Color = AppTheme.Colors.black,
     backgroundTint: Color = AppTheme.Colors.background,
 )

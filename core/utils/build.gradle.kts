@@ -2,10 +2,11 @@ import ru.crazerr.cashtracker.conventionplugins.base.extensions.libs
 import ru.crazerr.cashtracker.conventionplugins.project.extensions.commonMainDependencies
 
 plugins {
-    id("kmp.base.plugin")
+    id("kmp.compose.plugin")
 }
 
 commonMainDependencies {
+    implementation(libs.kotlinx.datetime)
     implementation(libs.decompose)
     implementation(libs.essenty)
     implementation(libs.decompose.extensions)

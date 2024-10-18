@@ -13,7 +13,7 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import ru.crazerr.cashtracker.feature.main.presentation.mainStory.ui.MainCoordinator
 import ru.crazerr.cashtracker.feature.transactions.presentation.transactionsStory.ui.TransactionsCoordinator
 
-@OptIn(ExperimentalCoilApi::class,)
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun RootCoordinator(
     rootComponent: RootComponent,
@@ -24,15 +24,18 @@ fun RootCoordinator(
     }
 
     RootNavigationDrawer(rootComponent = rootComponent) {
-        RootCoordinatorContent(rootComponent = rootComponent)
+        RootCoordinatorContent(rootComponent = rootComponent, modifier = modifier)
     }
 }
 
 @Composable
 private fun RootCoordinatorContent(
     rootComponent: RootComponent,
+    modifier: Modifier = Modifier,
 ) {
-    Box {
+    Box(
+        modifier = modifier
+    ) {
         Children(
             stack = rootComponent.stack
         ) {

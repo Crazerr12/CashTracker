@@ -11,7 +11,6 @@ import java.text.DateFormatSymbols
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-
 actual fun format(localDateTime: LocalDateTime): String {
     return DateTimeFormatter
         .ofPattern("dd/MM/yyyy - HH:mm", Locale.getDefault())
