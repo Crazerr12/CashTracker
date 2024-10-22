@@ -7,8 +7,10 @@ plugins {
 commonMainDependencies {
     implementation(project(":feature:transactions:data"))
     implementation(project(":feature:transactions:domain"))
+    implementation(project(":feature:transaction:presentation:api"))
 
     implementation(libs.kotlinx.datetime)
+    implementation(libs.paging.compose.common)
 }
 
 android {

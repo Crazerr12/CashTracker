@@ -4,5 +4,5 @@ import kotlinx.datetime.LocalDate
 
 data class TransactionHeader(
     val date: LocalDate,
-    val isExpand: Boolean = false,
+    val isExpand: Boolean = true,
 )

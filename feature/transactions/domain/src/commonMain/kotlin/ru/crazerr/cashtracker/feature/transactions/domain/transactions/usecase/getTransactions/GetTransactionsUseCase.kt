@@ -1,44 +1,42 @@
 package ru.crazerr.cashtracker.feature.transactions.domain.transactions.usecase.getTransactions
 
-import kotlinx.coroutines.flow.toList
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 import ru.crazerr.cashtracker.core.utils.domain.UseCase
-import ru.crazerr.cashtracker.core.utils.exception.fold
-import ru.crazerr.cashtracker.feature.transactions.domain.transactions.model.Account
-import ru.crazerr.cashtracker.feature.transactions.domain.transactions.model.Category
+import ru.crazerr.cashtracker.feature.transaction.domain.api.model.Transaction
+import ru.crazerr.cashtracker.feature.transactions.domain.transactions.paging.TransactionsPagingSource
 import ru.crazerr.cashtracker.feature.transactions.domain.transactions.repository.TransactionsRepository
 
-interface GetTransactionsUseCase : UseCase<GetTransactionsUseCase.Params, GetTransactionsResult> {
+interface GetTransactionsUseCase :
+    UseCase<GetTransactionsUseCase.Params, Flow<PagingData<Transaction>>> {
     data class Params(
         val query: String,
-        val categories: List<Category>,
-        val date: LocalDate,
-        val accounts: List<Account>,
+        val startDate: LocalDate,
+        val endDate: LocalDate,
+        val categoryIds: List<Long>,
+        val accountIds: List<Long>,
     )
 }
 
 internal class GetTransactionsUseCaseImpl(
     private val transactionsRepository: TransactionsRepository,
 ) : GetTransactionsUseCase {
-    override suspend fun execute(params: GetTransactionsUseCase.Params): GetTransactionsResult {
-        val response =
-            transactionsRepository.getTransactions(
+
+    override suspend fun execute(params: GetTransactionsUseCase.Params): Flow<PagingData<Transaction>> {
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+        ) {
+            TransactionsPagingSource(
+                transactionsRepository = transactionsRepository,
                 query = params.query,
-                categories = params.categories,
-                date = params.date,
-                accounts = params.accounts
+                startDate = params.startDate.toString(),
+                endDate = params.endDate.toString(),
+                categoryIds = params.categoryIds,
+                accountIds = params.accountIds,
             )
-
-        return response.fold(
-            onSuccess = { GetTransactionsResult.Ok(it.toList()) },
-            onFailure = { handleResponse(it) }
-        )
-    }
-
-    private fun handleResponse(throwable: Throwable): GetTransactionsResult {
-        return throwable.fold(
-            onNetworkError = { GetTransactionsResult.NetworkError },
-            onElse = { GetTransactionsResult.UnknownError(it) }
-        )
+        }.flow
     }
 }

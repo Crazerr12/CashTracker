@@ -1,8 +1,9 @@
 package ru.crazerr.cashtracker.feature.transactions.domain.transactions.model
 
-data class Account(
+data class CategoryShare(
     val id: Long,
     val name: String,
-    val balance: Float,
-    val currency: String,
+    val sum: Float,
+    val color: Int,
+    val iconId: String,
 )

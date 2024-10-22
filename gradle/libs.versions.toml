@@ -46,8 +46,8 @@ koin = "4.0.0-RC1"
 kstore = "0.8.0"
 
 # Room
-androidxRoom = "2.7.0-alpha09"
-sqlite = "2.5.0-alpha09"
+androidxRoom = "2.7.0-alpha10"
+sqlite = "2.5.0-alpha10"
 
 # Decompose
 decompose = "3.2.0-beta02"
@@ -58,6 +58,9 @@ detekt = "1.23.7"
 
 # ColorPicker
 colorpicker = "1.1.2"
+
+# Paging
+pagingCommon = "3.3.0-alpha02-0.5.1"
 
 [libraries]
 # Plugins for composite build
@@ -133,6 +136,9 @@ detekt-rules-ruleauthors = { module = "io.gitlab.arturbosch.detekt:detekt-rules-
 
 # ColorPicker
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
+
+# Paging
+paging-compose-common = { module = "app.cash.paging:paging-compose-common", version.ref = "pagingCommon" }
 
 [bundles]
 #Compose

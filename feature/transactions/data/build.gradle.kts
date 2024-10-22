@@ -7,6 +7,7 @@ plugins {
 commonMainDependencies {
     implementation(project(":feature:transactions:domain"))
 
+    implementation(libs.paging.compose.common)
     implementation(libs.kotlinx.datetime)
 }
 
