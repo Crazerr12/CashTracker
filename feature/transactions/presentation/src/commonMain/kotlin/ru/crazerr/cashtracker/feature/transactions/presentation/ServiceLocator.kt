@@ -15,7 +15,13 @@ val transactionsPresentationModule = module {
         )
     }
     single<TransactionsComponentFactory> {
-        TransactionsComponentFactoryImpl()
+        TransactionsComponentFactoryImpl(
+            getTransactionsUseCase = get(),
+            createTransactionComponentFactory = get(),
+            getAccountsUseCase = get(),
+            getCategoriesUseCase = get(),
+            getSummaryInfoUseCase = get(),
+        )
     }
     includes(dataTransactionsModule, domainTransactionsModule)
 }
