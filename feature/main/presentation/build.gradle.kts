@@ -10,6 +10,8 @@ commonMainDependencies {
     implementation(project(":feature:account:presentation:api"))
     implementation(project(":feature:transaction:presentation:api"))
     implementation(project(":feature:category:presentation:api"))
+    implementation(project(":feature:budget:presentation:api"))
+    implementation(project(":feature:goal:presentation:api"))
 
     implementation(libs.kotlinx.datetime)
 

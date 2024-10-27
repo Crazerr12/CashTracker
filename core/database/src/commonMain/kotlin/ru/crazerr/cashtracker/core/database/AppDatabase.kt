@@ -1,6 +1,5 @@
 package ru.crazerr.cashtracker.core.database
 
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -28,9 +27,6 @@ import ru.crazerr.cashtracker.core.database.transaction.TransactionEntity
         BudgetCategoryEntity::class
     ],
     version = DATABASE_VERSION,
-    autoMigrations = [
-        AutoMigration(from = 1, to = 2)
-    ]
 )
 @TypeConverters(value = [Converters::class])
 abstract class AppDatabase : RoomDatabase() {
@@ -47,4 +43,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun budgetCategoryDao(): BudgetCategoryDao
 }
 
-private const val DATABASE_VERSION = 2
+private const val DATABASE_VERSION = 1

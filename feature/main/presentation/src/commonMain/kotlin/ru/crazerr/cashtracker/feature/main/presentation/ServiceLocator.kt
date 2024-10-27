@@ -20,6 +20,8 @@ val mainPresentationModule = module {
             createAccountComponentFactory = get(),
             createTransactionComponentFactory = get(),
             getExpensesAndIncomeByMonthUseCase = get(),
+            newGoalComponentFactory = get(),
+            newBudgetComponentFactory = get()
         )
     }
     includes(mainDomainModule, mainDataModule)

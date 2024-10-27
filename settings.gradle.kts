@@ -31,9 +31,14 @@ include(":feature:main:data")
 include(":feature:main:domain")
 include(":feature:main:presentation")
 
+include(":feature:budgets:data")
+include(":feature:budgets:domain")
+include(":feature:budgets:presentation")
+
 include(":feature:budget:data")
 include(":feature:budget:domain")
-include(":feature:budget:presentation")
+include(":feature:budget:domain:api")
+include(":feature:budget:presentation:api")
 
 include(":feature:transactions:data")
 include(":feature:transactions:domain")
@@ -50,6 +55,12 @@ include(":feature:accounts:presentation")
 include(":feature:goals:data")
 include(":feature:goals:domain")
 include(":feature:goals:presentation")
+
+include(":feature:goal:data")
+include(":feature:goal:domain")
+include(":feature:goal:domain:api")
+include(":feature:goal:presentation")
+include(":feature:goal:presentation:api")
 
 include(":feature:cashback:data")
 include(":feature:cashback:domain")

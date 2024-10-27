@@ -9,11 +9,11 @@ import ru.crazerr.cashtracker.core.database.budget.model.BudgetCategoryWithCateg
 @Dao
 interface BudgetCategoryDao {
     @Insert
-    suspend fun insert(budgetEntity: BudgetCategoryEntity)
+    suspend fun insert(budgetCategoryEntity: BudgetCategoryEntity)
 
     @Query(
         """
-        SELECT b.id, b.current_amount, b.max_amount, b.last_transaction_date,
+        SELECT b.id, b.current_amount, b.max_amount, b.last_transaction_date, b.is_regular, b.next_creation_date,
             c.id AS category_id, c.name AS category_name, c.icon_id AS category_icon_id, c.color AS category_color
         FROM budgetCategories b
         INNER JOIN categories c ON b.category_id = c.id 

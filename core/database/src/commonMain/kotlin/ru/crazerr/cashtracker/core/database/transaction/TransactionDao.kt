@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import ru.crazerr.cashtracker.core.database.transaction.model.BudgetCategoryStats
 import ru.crazerr.cashtracker.core.database.transaction.model.CategoryShareDbo
 import ru.crazerr.cashtracker.core.database.transaction.model.ExpensesAndIncomeDbo
 import ru.crazerr.cashtracker.core.database.transaction.model.TransactionWithCategoryAndAccountDbo
@@ -124,7 +125,7 @@ interface TransactionDao {
         accountIds: List<Long>,
         query: String,
         limit: Int,
-        offset: Int
+        offset: Int,
     ): Flow<List<TransactionWithCategoryAndAccountDbo>>
 
     @Query(
@@ -171,6 +172,19 @@ interface TransactionDao {
         accountIds: List<Long>,
         query: String,
     ): Flow<List<CategoryShareDbo>>
+
+    @Query(
+        """
+        SELECT SUM(amount) AS current_amount, MAX(date) AS last_transaction_date
+        FROM transactions
+        WHERE category_id = :categoryId AND date BETWEEN :startDate AND :endDate
+    """
+    )
+    suspend fun getTransactionBudgetCategoryStats(
+        categoryId: Long,
+        startDate: String,
+        endDate: String,
+    ): BudgetCategoryStats
 
     @Update
     suspend fun update(vararg transactionEntity: TransactionEntity)

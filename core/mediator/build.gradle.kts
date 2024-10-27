@@ -16,6 +16,8 @@ commonMainDependencies {
     implementation(project(":feature:account:presentation"))
     implementation(project(":feature:category:presentation"))
     implementation(project(":feature:transaction:presentation"))
+    implementation(project(":feature:budget:presentation"))
+    implementation(project(":feature:goal:presentation"))
 
     implementation(libs.coil.compose)
     implementation(libs.coil)

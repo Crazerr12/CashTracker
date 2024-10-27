@@ -5,7 +5,9 @@ import org.koin.core.component.inject
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 import ru.crazerr.cashtracker.feature.account.presentation.accountPresentationModule
+import ru.crazerr.cashtracker.feature.budget.presentation.budgetPresentationModule
 import ru.crazerr.cashtracker.feature.category.presentation.categoryPresentationModule
+import ru.crazerr.cashtracker.feature.goal.presentation.goalPresentationModule
 import ru.crazerr.cashtracker.feature.main.presentation.mainPresentationModule
 import ru.crazerr.cashtracker.feature.main.presentation.mainStory.MainStoryComponentFactory
 import ru.crazerr.cashtracker.feature.transaction.presentation.transactionPresentationModule
@@ -24,6 +26,8 @@ internal val internalModule = module {
     includes(accountPresentationModule)
     includes(mainPresentationModule)
     includes(transactionsPresentationModule)
+    includes(budgetPresentationModule)
+    includes(goalPresentationModule)
 }
 
 internal class InternalComponent : KoinComponent {

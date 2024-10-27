@@ -5,6 +5,8 @@ plugins {
 }
 
 commonMainDependencies {
+    api(project(":feature:budget:domain:api"))
+    api(project(":feature:category:domain:api"))
     implementation(libs.kotlinx.datetime)
 }
 

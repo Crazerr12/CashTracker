@@ -10,6 +10,22 @@ internal class GetCurrenciesLocalDataSource(
 ) {
     suspend fun getCurrencies(): Result<List<Currency>> {
         return try {
+//            currencyDao.insert(
+//                CurrencyEntity(
+//                    name = "US Dollar",
+//                    code = "USD",
+//                    symbolNative = "$",
+//                    symbol = "$"
+//                )
+//            )
+//            currencyDao.insert(
+//                CurrencyEntity(
+//                    name = "Российский рубль",
+//                    code = "RUB",
+//                    symbolNative = "₽",
+//                    symbol = "₽"
+//                )
+//            )
             Result.success(currencyDao.getAll().first().toCurrencies())
         } catch (ex: Exception) {
             Result.failure(ex)
