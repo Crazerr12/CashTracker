@@ -11,4 +11,6 @@ data class BudgetCategoryWithCategory(
     @ColumnInfo(name = "current_amount") val currentAmount: Float,
     @ColumnInfo(name = "max_amount") val maxAmount: Float,
     @ColumnInfo(name = "last_transaction_date") val lastTransactionDate: LocalDate,
+    @ColumnInfo(name = "is_regular") val isRegular: Boolean,
+    @ColumnInfo(name = "next_creation_date") val nextCreationDate: LocalDate,
 )

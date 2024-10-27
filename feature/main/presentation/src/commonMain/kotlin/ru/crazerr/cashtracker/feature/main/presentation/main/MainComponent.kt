@@ -17,6 +17,8 @@ import ru.crazerr.cashtracker.core.utils.coroutine.componentCoroutineScope
 import ru.crazerr.cashtracker.core.utils.presentation.StateHolder
 import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountComponent
 import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountComponentAction
+import ru.crazerr.cashtracker.feature.budget.presentation.api.newBudget.NewBudgetComponent
+import ru.crazerr.cashtracker.feature.budget.presentation.api.newBudget.NewBudgetComponentAction
 import ru.crazerr.cashtracker.feature.main.domain.usecase.getCategoryShares.GetCategorySharesUseCase
 import ru.crazerr.cashtracker.feature.main.domain.usecase.getExpensesAndIncomeByMonth.GetExpensesAndIncomeByMonthUseCase
 import ru.crazerr.cashtracker.feature.main.domain.usecase.getTransactions.GetTransactionsUseCase
@@ -24,6 +26,8 @@ import ru.crazerr.cashtracker.feature.main.presentation.main.handler.GetAccounts
 import ru.crazerr.cashtracker.feature.main.presentation.main.handler.GetCategorySharesResultHandler
 import ru.crazerr.cashtracker.feature.main.presentation.main.handler.GetExpensesAndIncomeByMonthResultHandler
 import ru.crazerr.cashtracker.feature.main.presentation.main.handler.GetTransactionsResultHandler
+import ru.crazerr.cashtracker.feature.presentation.api.newGoal.NewGoalComponent
+import ru.crazerr.cashtracker.feature.presentation.api.newGoal.NewGoalComponentAction
 import ru.crazerr.cashtracker.feature.transaction.presentation.api.createTransactionDialog.CreateTransactionComponent
 import ru.crazerr.cashtracker.feature.transaction.presentation.api.createTransactionDialog.CreateTransactionComponentAction
 
@@ -75,11 +79,11 @@ class MainComponent(
     }
 
     private fun onManageBudgetDialog() {
-        // TODO
+        dialogNavigation.activate(DialogConfig.CreateBudget)
     }
 
     private fun onManageGoalDialog() {
-        // TODO
+        dialogNavigation.activate(DialogConfig.CreateGoal)
     }
 
     private fun getExpensesAndIncomeByMonth() {
@@ -174,15 +178,36 @@ class MainComponent(
         return when (config) {
             DialogConfig.CreateAccount -> createAccountDialog(componentContext = componentContext)
             DialogConfig.CreateTransaction -> createTransactionDialog(componentContext = componentContext)
-            DialogConfig.CreateBudget -> createBudgetDialog()
-            DialogConfig.CreateGoal -> createGoalDialog()
+            DialogConfig.CreateBudget -> createBudgetDialog(componentContext = componentContext)
+            DialogConfig.CreateGoal -> createGoalDialog(componentContext = componentContext)
         }
     }
 
-    private fun createBudgetDialog(): DialogChild.CreateBudget =
-        DialogChild.CreateBudget
+    private fun createBudgetDialog(componentContext: ComponentContext): DialogChild.CreateBudget =
+        DialogChild.CreateBudget(
+            component = dependencies.newBudgetComponentFactory.create(
+                componentContext = componentContext,
+                onAction = { action ->
+                    when (action) {
+                        NewBudgetComponentAction.BudgetCreated -> dialogNavigation.dismiss()
+                        NewBudgetComponentAction.Canceled -> dialogNavigation.dismiss()
+                    }
+                }
+            )
+        )
 
-    private fun createGoalDialog(): DialogChild.CreateGoal = DialogChild.CreateGoal
+    private fun createGoalDialog(componentContext: ComponentContext): DialogChild.CreateGoal =
+        DialogChild.CreateGoal(
+            component = dependencies.newGoalComponentFactory.create(
+                componentContext = componentContext,
+                onAction = { action ->
+                    when (action) {
+                        NewGoalComponentAction.Canceled -> dialogNavigation.dismiss()
+                        NewGoalComponentAction.GoalCreated -> dialogNavigation.dismiss()
+                    }
+                }
+            )
+        )
 
     private fun createAccountDialog(componentContext: ComponentContext): DialogChild.CreateAccount =
         DialogChild.CreateAccount(
@@ -213,8 +238,8 @@ class MainComponent(
     sealed class DialogChild {
         data class CreateTransaction(val component: CreateTransactionComponent) : DialogChild()
         data class CreateAccount(val component: CreateAccountComponent) : DialogChild()
-        data object CreateBudget : DialogChild()
-        data object CreateGoal : DialogChild()
+        data class CreateBudget(val component: NewBudgetComponent) : DialogChild()
+        data class CreateGoal(val component: NewGoalComponent) : DialogChild()
     }
 
     @Serializable

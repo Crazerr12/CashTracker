@@ -12,7 +12,7 @@ data class GoalEntity(
     @ColumnInfo(name = "current_amount") val currentAmount: Float,
     @ColumnInfo(name = "target_amount") val targetAmount: Float,
     @ColumnInfo(name = "start_date") val startDate: LocalDate,
-    @ColumnInfo(name = "end_date") val endDate: LocalDate,
+    @ColumnInfo(name = "final_date") val finalDate: LocalDate,
     val priority: Int,
     val description: String?,
 )

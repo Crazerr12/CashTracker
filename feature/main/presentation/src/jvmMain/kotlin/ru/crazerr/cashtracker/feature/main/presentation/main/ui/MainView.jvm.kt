@@ -52,7 +52,6 @@ import cashtracker.feature.main.presentation.generated.resources.main_screen_bal
 import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_current_balance_title
 import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_current_expenses_title
 import cashtracker.feature.main.presentation.generated.resources.main_screen_balance_card_current_income_title
-import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_import_data
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_new_account
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_new_budget
 import cashtracker.feature.main.presentation.generated.resources.main_screen_button_text_new_goal
@@ -78,10 +77,12 @@ import ru.crazerr.cashtracker.core.utils.formatter.CurrencyFormatter
 import ru.crazerr.cashtracker.core.utils.model.TransactionType
 import ru.crazerr.cashtracker.feature.account.domain.api.model.Account
 import ru.crazerr.cashtracker.feature.account.presentation.api.createAccountDialog.CreateAccountViewFactory
+import ru.crazerr.cashtracker.feature.budget.presentation.api.newBudget.NewBudgetViewFactory
 import ru.crazerr.cashtracker.feature.main.domain.model.CategoryShare
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainComponent
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainState
 import ru.crazerr.cashtracker.feature.main.presentation.main.MainViewAction
+import ru.crazerr.cashtracker.feature.presentation.api.newGoal.NewGoalViewFactory
 import ru.crazerr.cashtracker.feature.transaction.domain.api.model.Transaction
 import ru.crazerr.cashtracker.feature.transaction.presentation.api.createTransactionDialog.CreateTransactionViewFactory
 import kotlin.math.min
@@ -108,12 +109,14 @@ actual fun MainView(component: MainComponent) {
                 createTransactionDialog.create(modifier = Modifier, component = it.component)
             }
 
-            MainComponent.DialogChild.CreateBudget -> {
-                // TODO
+            is MainComponent.DialogChild.CreateBudget -> {
+                val newBudgetDialog = koinInject<NewBudgetViewFactory>()
+                newBudgetDialog.create(modifier = Modifier, component = it.component)
             }
 
-            MainComponent.DialogChild.CreateGoal -> {
-                // TODO
+            is MainComponent.DialogChild.CreateGoal -> {
+                val newGoalDialog = koinInject<NewGoalViewFactory>()
+                newGoalDialog.create(modifier = Modifier, component = it.component)
             }
         }
     }
@@ -189,7 +192,7 @@ private fun MainViewHeader(obtainViewAction: (MainViewAction) -> Unit) {
 
         AddButton(
             text = stringResource(Res.string.main_screen_button_text_new_budget),
-            onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
+            onClick = { obtainViewAction(MainViewAction.ManageBudgetDialog) },
             shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
             painter = AppIcons.PlusIcon.painter,
             contentDescription = AppIcons.PlusIcon.contentDescription,
@@ -200,7 +203,7 @@ private fun MainViewHeader(obtainViewAction: (MainViewAction) -> Unit) {
 
         AddButton(
             text = stringResource(Res.string.main_screen_button_text_new_goal),
-            onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
+            onClick = { obtainViewAction(MainViewAction.ManageGoalDialog) },
             shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
             painter = AppIcons.PlusIcon.painter,
             contentDescription = AppIcons.PlusIcon.contentDescription,
@@ -218,16 +221,16 @@ private fun MainViewHeader(obtainViewAction: (MainViewAction) -> Unit) {
             background = AppTheme.Colors.red,
         )
 
-        Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen12))
-
-        AddButton(
-            text = stringResource(Res.string.main_screen_button_text_import_data),
-            onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
-            shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
-            painter = AppIcons.PlusIcon.painter,
-            contentDescription = AppIcons.PlusIcon.contentDescription,
-            background = AppTheme.Colors.blue,
-        )
+//        Spacer(modifier = Modifier.width(AppTheme.Dimens.dimen12))
+//
+//        AddButton(
+//            text = stringResource(Res.string.main_screen_button_text_import_data),
+//            onClick = { obtainViewAction(MainViewAction.ManageTransactionDialog) },
+//            shape = RoundedCornerShape(AppTheme.Dimens.dimen10),
+//            painter = AppIcons.PlusIcon.painter,
+//            contentDescription = AppIcons.PlusIcon.contentDescription,
+//            background = AppTheme.Colors.blue,
+//        )
     }
 }
 
