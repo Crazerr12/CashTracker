@@ -1,4 +1,4 @@
-package ru.crazerr.cashtracker.feature.transaction.data.transaction.updateTransaction.dataSource
+package ru.crazerr.cashtracker.feature.transaction.data.transaction.updateAccount.dataSource
 
 import ru.crazerr.cashtracker.core.database.account.AccountDao
 import ru.crazerr.cashtracker.core.database.account.AccountEntity

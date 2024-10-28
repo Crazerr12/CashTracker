@@ -8,7 +8,7 @@ import ru.crazerr.cashtracker.feature.transaction.data.category.CategoryReposito
 import ru.crazerr.cashtracker.feature.transaction.data.category.getCategories.dataSource.GetCategoriesLocalDataSource
 import ru.crazerr.cashtracker.feature.transaction.data.transaction.TransactionRepositoryImpl
 import ru.crazerr.cashtracker.feature.transaction.data.transaction.addTransaction.dataSource.AddTransactionLocalDataSource
-import ru.crazerr.cashtracker.feature.transaction.data.transaction.updateTransaction.dataSource.UpdateAccountLocalDataSource
+import ru.crazerr.cashtracker.feature.transaction.data.transaction.updateAccount.dataSource.UpdateAccountLocalDataSource
 import ru.crazerr.cashtracker.feature.transaction.domain.repository.AccountRepository
 import ru.crazerr.cashtracker.feature.transaction.domain.repository.CategoryRepository
 import ru.crazerr.cashtracker.feature.transaction.domain.repository.TransactionRepository

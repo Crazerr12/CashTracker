@@ -8,7 +8,7 @@ data class BudgetCategory(
     val category: Category,
     val currentAmount: Float,
     val maxAmount: Float,
-    val lastTransactionDate: Long,
+    val lastTransactionDate: LocalDate,
     val isRegular: Boolean,
     val nextCreationDate: LocalDate,
 )

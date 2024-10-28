@@ -7,6 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.datetime.LocalDate
 import ru.crazerr.cashtracker.core.database.category.CategoryEntity
+import ru.crazerr.cashtracker.core.utils.dateTime.now
 
 @Entity(
     tableName = "budgetCategories",
@@ -28,4 +29,5 @@ data class BudgetCategoryEntity(
     @ColumnInfo(name = "last_transaction_date") val lastTransactionDate: LocalDate,
     @ColumnInfo(name = "is_regular", defaultValue = "0") val isRegular: Boolean,
     @ColumnInfo(name = "next_creation_date") val nextCreationDate: LocalDate?,
+    @ColumnInfo(name = "creation_date") val creationDate: LocalDate = LocalDate.now()
 )

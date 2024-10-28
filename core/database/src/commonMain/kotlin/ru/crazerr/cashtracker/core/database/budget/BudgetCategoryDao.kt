@@ -3,6 +3,7 @@ package ru.crazerr.cashtracker.core.database.budget
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import ru.crazerr.cashtracker.core.database.budget.model.BudgetCategoryWithCategory
 
@@ -20,4 +21,24 @@ interface BudgetCategoryDao {
     """
     )
     fun getAll(): Flow<List<BudgetCategoryWithCategory>>
+
+    @Update
+    suspend fun update(budgetCategoryEntity: BudgetCategoryEntity)
+
+    @Query(
+        """
+        SELECT *
+        FROM budgetCategories
+        WHERE creation_date BETWEEN :startOfMonthDate AND :endOfMonthDate
+            AND category_id = :categoryId
+    """
+    )
+    suspend fun getByCategoryId(
+        categoryId: Long,
+        startOfMonthDate: String,
+        endOfMonthDate: String
+    ): BudgetCategoryEntity
+
+    @Query("DELETE FROM budgetCategories WHERE id = :id")
+    suspend fun deleteById(id: Long)
 }

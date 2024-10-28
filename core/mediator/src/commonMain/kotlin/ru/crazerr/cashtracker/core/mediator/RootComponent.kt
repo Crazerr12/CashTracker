@@ -13,6 +13,8 @@ import ru.crazerr.cashtracker.core.utils.navigationDrawer.NavigationDrawerState
 import ru.crazerr.cashtracker.core.utils.navigationDrawer.navigationDrawerManager
 import ru.crazerr.cashtracker.core.utils.toast.ToastState
 import ru.crazerr.cashtracker.core.utils.toast.toastManager
+import ru.crazerr.cashtracker.feature.budgets.presentation.budgetsStory.BudgetsStoryComponent
+import ru.crazerr.cashtracker.feature.budgets.presentation.budgetsStory.BudgetsStoryComponentAction
 import ru.crazerr.cashtracker.feature.main.presentation.mainStory.MainStoryComponent
 import ru.crazerr.cashtracker.feature.transactions.presentation.transactionsStory.TransactionsStoryComponent
 import ru.crazerr.cashtracker.feature.transactions.presentation.transactionsStory.TransactionsStoryComponentAction
@@ -32,8 +34,8 @@ interface RootComponent : BackHandlerOwner {
     sealed interface Child {
         class MainChild(val component: MainStoryComponent) : Child
         class TransactionsChild(val component: TransactionsStoryComponent) : Child
+        class BudgetsChild(val component: BudgetsStoryComponent) : Child
         class SettingsChild(val component: MainStoryComponent) : Child
-        class BudgetChild(val component: MainStoryComponent) : Child
         class GoalsChild(val component: MainStoryComponent) : Child
         class AccountsChild(val component: MainStoryComponent) : Child
     }
@@ -43,7 +45,7 @@ interface RootComponent : BackHandlerOwner {
         data object MainStory : Config
         data object TransactionsStory : Config
         data object SettingsStory : Config
-        data object BudgetStory : Config
+        data object BudgetsStory : Config
         data object GoalsStory : Config
         data object AccountsStory : Config
     }
@@ -93,7 +95,7 @@ internal class RootComponentImpl(
 
             RootNavigationDrawerActions.Budget -> {
                 _selectedNavigationDrawerItem.value = actions
-                navigation.bringToFront(RootComponent.Config.BudgetStory)
+                navigation.bringToFront(RootComponent.Config.BudgetsStory)
             }
 
             RootNavigationDrawerActions.Settings -> {
@@ -144,7 +146,16 @@ internal class RootComponentImpl(
                 )
             )
 
-            RootComponent.Config.BudgetStory -> TODO()
+            RootComponent.Config.BudgetsStory -> RootComponent.Child.BudgetsChild(
+                component = di.budgetsStoryComponentFactory.create(
+                    componentContext = componentContext,
+                    onAction = { action ->
+                        when (action) {
+                            BudgetsStoryComponentAction.BackClick -> TODO()
+                        }
+                    }
+                )
+            )
 
             RootComponent.Config.SettingsStory -> TODO()
 
