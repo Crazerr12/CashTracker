@@ -10,6 +10,7 @@ import coil3.compose.setSingletonImageLoaderFactory
 import coil3.request.crossfade
 import coil3.util.DebugLogger
 import com.arkivanov.decompose.extensions.compose.stack.Children
+import ru.crazerr.cashtracker.feature.budgets.presentation.budgetsStory.ui.BudgetsCoordinator
 import ru.crazerr.cashtracker.feature.main.presentation.mainStory.ui.MainCoordinator
 import ru.crazerr.cashtracker.feature.transactions.presentation.transactionsStory.ui.TransactionsCoordinator
 
@@ -45,7 +46,7 @@ private fun RootCoordinatorContent(
 
                 is RootComponent.Child.TransactionsChild -> TransactionsCoordinator(component = child.component)
 
-                is RootComponent.Child.BudgetChild -> TODO()
+                is RootComponent.Child.BudgetsChild -> BudgetsCoordinator(component = child.component)
                 is RootComponent.Child.SettingsChild -> TODO()
                 is RootComponent.Child.AccountsChild -> TODO()
                 is RootComponent.Child.GoalsChild -> TODO()
